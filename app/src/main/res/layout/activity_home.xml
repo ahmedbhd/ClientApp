@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    >
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:fontFamily="monospace"
+                android:text="Welcome to the Biggest Statistic App"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:textColor="@color/primary"/>
+            <ViewFlipper
+                android:id="@+id/ViewFlipperKa"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_margin="5dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/static2" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/static3" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/static4" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/static5" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/static1" />
+
+            </ViewFlipper>
+
+     <Button
+         android:layout_width="80dp"
+         android:layout_height="65dp"
+         android:id="@+id/showLayout"
+
+         android:layout_gravity="center"
+         android:background="@drawable/flech"/>
+        </LinearLayout>
+
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:fitsSystemWindows="true"
+android:background="@android:color/white"
+    android:layout_marginTop="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#A9E2F3"
+            android:id="@+id/layoutDescription"
+            android:visibility="invisible">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Notre solution consiste de développer un plugin qui sera installé dans les récepteurs IP TV et qui sera connecté à un serveur en ligne pour la collecte des données."
+                android:textSize="17dp"
+                android:textAlignment="center"
+                android:textStyle="italic"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get Started ! "
+                android:id="@+id/showCharts"
+                android:textSize="22dp"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:textColor="@color/primary"
+                android:textStyle="bold"
+                android:layout_marginBottom="5dp"/>
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/aluminum" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="5dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contactez Nous : "
+                android:textColor="@color/black"
+                android:textSize="18dp"
+                android:textStyle="bold"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Adresse Electronique : esprit@esprit.tn"
+                android:layout_margin="2dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Numero De Telephone : 71000000"
+                android:layout_margin="2dp"/>
+            <Button
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/fb"
+                android:layout_gravity="center"
+                android:id="@+id/fbbutton"/>
+            </LinearLayout>
+
+
+
+
+        </LinearLayout>
+</ScrollView>
+
+</LinearLayout>

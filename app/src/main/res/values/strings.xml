@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">PimApplication</string>
+    <string name="title_activity_home">HomeActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="age_array">
+        <item> inf 12ans </item>
+        <item> sup 12ans </item>
+        <item> inf 18ans </item>
+        <item> sup 18ans</item>
+        <item> sup 28ans </item>
+        <item> sup 35ans </item>
+        <item> sup 45ans </item>
+        <item> sup 50ans </item>
+
+    </string-array>
+    <string-array name="region_array">
+        <item>North </item>
+        <item> South </item>
+        <item> East </item>
+        <item> West </item>
+
+
+    </string-array>
+    <string-array name="nombre_array">
+        <item> 2 ou plus </item>
+        <item> 3 ou plus </item>
+        <item> 4 ou plus </item>
+        <item> 5 ou plus </item>
+        <item> plus 6 </item>
+
+    </string-array>
+</resources>

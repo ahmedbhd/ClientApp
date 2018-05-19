@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+
+
+        <item
+            android:id="@+id/general_statistic"
+            android:icon="@drawable/statistic_icon"
+
+            android:title="General Statistic" />
+        <item
+            android:id="@+id/advanced_research"
+            android:icon="@drawable/search_icon"
+
+            android:title="Advanced Research" />
+        <item
+            android:id="@+id/youtube_statistic"
+            android:icon="@drawable/youtube_icon"
+            android:title="Youtube Statistics"/>
+        <item
+            android:id="@+id/watcher"
+            android:icon="@drawable/favorite_icon"
+            android:title="Favorite Channel"/>
+
+    </group>
+
+    <item android:title="Disconnect">
+        <menu>
+            <item
+                android:id="@+id/disconnect"
+                android:icon="@drawable/logout"
+                android:title="Disconnect" />
+
+        </menu>
+    </item>
+
+</menu>
