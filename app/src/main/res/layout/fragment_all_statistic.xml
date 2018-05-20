@@ -52,22 +52,22 @@
                 </RadioGroup>
             </LinearLayout>
 
-            <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/pieChart"
-                android:layout_width="match_parent"
-                android:layout_height="500dp">
+            <!--<com.github.mikephil.charting.charts.PieChart-->
+                <!--android:id="@+id/pieChart"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="500dp">-->
 
-            </com.github.mikephil.charting.charts.PieChart>
+            <!--</com.github.mikephil.charting.charts.PieChart>-->
 
-            <View style="@style/Divider" />
+            <!--<View style="@style/Divider" />-->
 
-            <com.github.mikephil.charting.charts.BarChart
-                android:layout_width="match_parent"
-                android:layout_height="450dp"
-                android:layout_marginTop="10dp"
-                android:id="@+id/barChart">
+            <!--<com.github.mikephil.charting.charts.BarChart-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="450dp"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:id="@+id/barChart">-->
 
-            </com.github.mikephil.charting.charts.BarChart>
+            <!--</com.github.mikephil.charting.charts.BarChart>-->
 
 
             <View style="@style/Divider" />

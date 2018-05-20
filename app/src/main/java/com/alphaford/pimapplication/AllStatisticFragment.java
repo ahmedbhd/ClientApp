@@ -64,8 +64,8 @@ import java.util.List;
 import java.util.Map;
 
 public class AllStatisticFragment extends Fragment {
-    PieChart pieChart;
-    BarChart barChart;
+//    PieChart pieChart;
+//    BarChart barChart;
     LineChart lineChart;
     View rootView;
 
@@ -100,8 +100,8 @@ public class AllStatisticFragment extends Fragment {
                              Bundle savedInstanceState) {
 
          rootView = inflater.inflate(R.layout.fragment_all_statistic, container, false);
-        pieChart=(PieChart) rootView.findViewById(R.id.pieChart);
-        barChart=(BarChart) rootView.findViewById(R.id.barChart);
+//        pieChart=(PieChart) rootView.findViewById(R.id.pieChart);
+//        barChart=(BarChart) rootView.findViewById(R.id.barChart);
         lineChart= (LineChart) rootView.findViewById(R.id.lineChart);
         lineChart.animateX(1000);
 
@@ -124,16 +124,18 @@ public class AllStatisticFragment extends Fragment {
             radioButton = rootView.findViewById(checkedId);
             if (radioButton.getText().equals("Channels"))
             {
-                barChart.clear();
-                pieChart.clear();
+//                barChart.clear();
+//                pieChart.clear();
+                lineChart.clear();
                 fetchLocations("channel");
 
 
             }
             if (radioButton.getText().equals("Programs"))
             {
-                barChart.clear();
-                pieChart.clear();
+//                barChart.clear();
+//                pieChart.clear();
+                lineChart.clear();
                 fetchLocations("program");
 
             }
@@ -168,6 +170,8 @@ public class AllStatisticFragment extends Fragment {
 
         Collections.sort(historiqueChaines, (o1, o2) -> o2.getNb_minute().compareTo(o1.getNb_minute()));
 
+        Log.d(" viewdb",viewsdb.toString());
+        Log.d("historique in line",historiqueChaines.toString());
 //        ArrayList<String> xAxes = new ArrayList<>();
 //        ArrayList<Entry> yAxessin = new ArrayList<>();
 //        ArrayList<Entry> yAxescons = new ArrayList<>();
@@ -199,6 +203,9 @@ public class AllStatisticFragment extends Fragment {
 //        lineChart.setData(new LineData(lineDataSets));
 //        lineChart.setVisibleXRangeMaximum(65f);
 
+
+        //Collections.sort(listdbviewsch, (o1, o2) -> o2.getNbr_teles()-(o1.getNbr_teles()));
+
         ArrayList<Entry> yValue1 = new ArrayList<>();
 
         if (count>10) {
@@ -213,20 +220,33 @@ public class AllStatisticFragment extends Fragment {
             }
         }
 
-
+//        if (count>10) {
+//            for (int i = 0; i < 10; i++) {
+//                int val = listdbviewsch.get(i).getNbr_teles();
+//                yValue1.add(new Entry(i, val));
+//            }
+//        }else{
+//            for (int i = 0; i < count; i++) {
+//                int val = listdbviewsch.get(i).getNbr_teles();
+//                yValue1.add(new Entry(i, val));
+//            }
+//        }
+//        Log.d("list db ",listdbviewsch.toString());
         ArrayList<Entry> yValue2 = new ArrayList<>();
 
         if (count>10) {
             for (int i = 0; i < 10; i++) {
-                int val = viewsdb.get(i).getNbr_teles();
+                int val = viewsdb.get(i).getNbr_teles()*10000000;
                 yValue2.add(new Entry(i, val));
             }
         }else{
             for (int i = 0; i < count; i++) {
-                int val = viewsdb.get(i).getNbr_teles();
+                int val = viewsdb.get(i).getNbr_teles()*10000000;
                 yValue2.add(new Entry(i, val));
             }
         }
+
+
 
         LineDataSet set1,set2;
         set1 = new LineDataSet(yValue1,"Youtube views");
@@ -244,83 +264,83 @@ public class AllStatisticFragment extends Fragment {
 
     }
 
-    private void setBarChartData(int count) {
-        float barWidth=0.9f;
+//    private void setBarChartData(int count) {
+//        float barWidth=0.9f;
+//
+//        ArrayList<BarEntry> yVals=new ArrayList<>();
+//        Collections.sort(historiqueChaines, (o1, o2) -> o2.getNb_minute().compareTo(o1.getNb_minute()));
+//        if (historiqueChaines.size()>10) {
+//            for (int i = 0; i < 10; i++) {
+//
+//                Long value = (historiqueChaines.get(i).getNb_minute());
+//                yVals.add(new BarEntry(i, value));
+//            }
+//        }else{
+//            for (int i = 0; i < historiqueChaines.size(); i++) {
+//
+//                Long value = (historiqueChaines.get(i).getNb_minute());
+//                yVals.add(new BarEntry(i, value));
+//            }
+//        }
+//        BarDataSet set = new BarDataSet(yVals,"Stats for the channels which have a Youtube channel");
+//        set.setColors(ColorTemplate.MATERIAL_COLORS);
+//        set.setDrawValues(true);
+//        BarData data=new BarData(set);
+//        data.setBarWidth(barWidth);
+//        barChart.setData(data);
+//        barChart.invalidate();
+//        barChart.animateY(1000);
+//
+//
+//    }
 
-        ArrayList<BarEntry> yVals=new ArrayList<>();
-        Collections.sort(historiqueChaines, (o1, o2) -> o2.getNb_minute().compareTo(o1.getNb_minute()));
-        if (historiqueChaines.size()>10) {
-            for (int i = 0; i < 10; i++) {
-
-                Long value = (historiqueChaines.get(i).getNb_minute());
-                yVals.add(new BarEntry(i, value));
-            }
-        }else{
-            for (int i = 0; i < historiqueChaines.size(); i++) {
-
-                Long value = (historiqueChaines.get(i).getNb_minute());
-                yVals.add(new BarEntry(i, value));
-            }
-        }
-        BarDataSet set = new BarDataSet(yVals,"Stats for the channels which have a Youtube channel");
-        set.setColors(ColorTemplate.MATERIAL_COLORS);
-        set.setDrawValues(true);
-        BarData data=new BarData(set);
-        data.setBarWidth(barWidth);
-        barChart.setData(data);
-        barChart.invalidate();
-        barChart.animateY(1000);
-
-
-    }
-
-    private void addDataPie(int count) {
-        ArrayList<PieEntry> yEntrys=new ArrayList<>();
-        ArrayList<String > xEntrys=new ArrayList<>();
-        Collections.sort(historiqueChaines, (o1, o2) -> o2.getNb_minute().compareTo(o1.getNb_minute()));
-
-        if (count>10) {
-            for (int i = 0; i < 10; i++) {
-                yEntrys.add(new PieEntry(historiqueChaines.get(i).getNb_minute()));
-
-            }
-            for (int i = 0; i < 10; i++) {
-                xEntrys.add(historiqueChaines.get(i).getNom_chaine());
-            }
-        }else {
-            for (int i = 0; i < count; i++) {
-                yEntrys.add(new PieEntry(historiqueChaines.get(i).getNb_minute()));
-
-            }
-            for (int i = 0; i < count ; i++) {
-                xEntrys.add(historiqueChaines.get(i).getNom_chaine());
-            }
-        }
-        //create the data set
-        PieDataSet pieDataSet=new PieDataSet(yEntrys,"Stats for the channels which have a Youtube channel");
-        pieDataSet.setSliceSpace(2);
-        pieDataSet.setValueTextSize(12);
-        //add Colors to dataSet
-        ArrayList<Integer> colors=new ArrayList<>();
-        colors.add(Color.BLUE);
-        colors.add(Color.GRAY);
-        colors.add(Color.CYAN);
-        colors.add(Color.RED);
-        colors.add(Color.YELLOW);
-        colors.add(Color.GREEN);
-        pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-
-        //add legends to chart
-        Legend legend=pieChart.getLegend();
-        legend.setForm(Legend.LegendForm.CIRCLE);
-        legend.setPosition(Legend.LegendPosition.LEFT_OF_CHART);
-
-        //create Pie data object
-        PieData pieData=new PieData(pieDataSet);
-        pieChart.setData(pieData);
-        pieChart.invalidate();
-
-    }
+//    private void addDataPie(int count) {
+//        ArrayList<PieEntry> yEntrys=new ArrayList<>();
+//        ArrayList<String > xEntrys=new ArrayList<>();
+//        Collections.sort(historiqueChaines, (o1, o2) -> o2.getNb_minute().compareTo(o1.getNb_minute()));
+//
+//        if (count>10) {
+//            for (int i = 0; i < 10; i++) {
+//                yEntrys.add(new PieEntry(historiqueChaines.get(i).getNb_minute()));
+//
+//            }
+//            for (int i = 0; i < 10; i++) {
+//                xEntrys.add(historiqueChaines.get(i).getNom_chaine());
+//            }
+//        }else {
+//            for (int i = 0; i < count; i++) {
+//                yEntrys.add(new PieEntry(historiqueChaines.get(i).getNb_minute()));
+//
+//            }
+//            for (int i = 0; i < count ; i++) {
+//                xEntrys.add(historiqueChaines.get(i).getNom_chaine());
+//            }
+//        }
+//        //create the data set
+//        PieDataSet pieDataSet=new PieDataSet(yEntrys,"Stats for the channels which have a Youtube channel");
+//        pieDataSet.setSliceSpace(2);
+//        pieDataSet.setValueTextSize(12);
+//        //add Colors to dataSet
+//        ArrayList<Integer> colors=new ArrayList<>();
+//        colors.add(Color.BLUE);
+//        colors.add(Color.GRAY);
+//        colors.add(Color.CYAN);
+//        colors.add(Color.RED);
+//        colors.add(Color.YELLOW);
+//        colors.add(Color.GREEN);
+//        pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+//
+//        //add legends to chart
+//        Legend legend=pieChart.getLegend();
+//        legend.setForm(Legend.LegendForm.CIRCLE);
+//        legend.setPosition(Legend.LegendPosition.LEFT_OF_CHART);
+//
+//        //create Pie data object
+//        PieData pieData=new PieData(pieDataSet);
+//        pieChart.setData(pieData);
+//        pieChart.invalidate();
+//
+//    }
 
 
     private void fetchrecepteurs() {
@@ -469,7 +489,7 @@ public class AllStatisticFragment extends Fragment {
 
             }
             int count=0;
-
+            ch.clear();
             for (int i=0 ;i<channels.size();i++){
                 for (int j=0 ;j<channels.size();j++){
                     if( (channels.get(i).getChannel().equals(channels.get(j).getChannel()))){
@@ -485,6 +505,7 @@ public class AllStatisticFragment extends Fragment {
             }
             Log.d("youtube all ch",listdbviewsch.toString());
             fetchyoutubech();
+            //addLinerData(listdbviewsch.size(),1);
 
         }
     };
@@ -659,19 +680,19 @@ public class AllStatisticFragment extends Fragment {
 //        }
 
         Log.d("hisyoutube",historiqueChaines.toString());
-        int j=0;
-        for (int i = 0;i<listdbviewsch.size(); i++){
-            if(historiqueChaines.get(j).getNom_chaine().equals(listdbviewsch.get(i).getNom_chaine())){
-                historiqueChaine p = listdbviewsch.get(i);
-                listcombview.add(new historiqueChaine(p.getNom_chaine(), historiqueChaines.get(j).getNb_minute()+p.getNbr_teles()));
-                j++;
-            }
-        }
+//        int j=0;
+//        for (int i = 0;i<listdbviewsch.size(); i++){
+//            if(historiqueChaines.get(j).getNom_chaine().equals(listdbviewsch.get(i).getNom_chaine())){
+//                historiqueChaine p = listdbviewsch.get(i);
+//                listcombview.add(new historiqueChaine(p.getNom_chaine(), historiqueChaines.get(j).getNb_minute()+p.getNbr_teles()));
+//                j++;
+//            }
+//        }
         if (historiqueChaines.size()==0)
             Toast.makeText(getActivity(), "No charts to display", Toast.LENGTH_LONG).show();
         else {
 
-            int c = listcombview.size();
+            int c = historiqueChaines.size();
 //            addDataPie(c);
 //            setBarChartData(c);
             addLinerData(c,1);
@@ -760,19 +781,19 @@ public class AllStatisticFragment extends Fragment {
         }
 
         Log.d("hisyoutube",historiqueChaines.toString());
-        int j=0;
-        for (int i = 0;i<listdbviewsprog.size(); i++){
-            if(historiqueChaines.get(j).getNom_chaine().equals(listdbviewsprog.get(i).getNom_program())){
-                Program p = listdbviewsprog.get(i);
-                listcombview.add(new historiqueChaine(p.getNom_program(), historiqueChaines.get(j).getNb_minute()+p.getNb_telesp()));
-                j++;
-            }
-        }
-        if (listcombview.size()==0)
+//        int j=0;
+//        for (int i = 0;i<listdbviewsprog.size(); i++){
+//            if(historiqueChaines.get(j).getNom_chaine().equals(listdbviewsprog.get(i).getNom_program())){
+//                Program p = listdbviewsprog.get(i);
+//                listcombview.add(new historiqueChaine(p.getNom_program(), historiqueChaines.get(j).getNb_minute()+p.getNb_telesp()));
+//                j++;
+//            }
+//        }
+        if (historiqueChaines.size()==0)
             Toast.makeText(getActivity(), "No charts to display", Toast.LENGTH_LONG).show();
         else {
 
-            int c = listcombview.size();
+            int c = historiqueChaines.size();
 //            addDataPie(c);
 //            setBarChartData(c);
             addLinerData(c,0);
