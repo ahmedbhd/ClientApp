@@ -115,34 +115,9 @@ public class FragProgVues extends Fragment {
         fetchrecepteurs();
 
         fetchLocations();
-        /*try {
-            CallSocket();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }*/
 
 
-        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, Highlight h) {
-                String chaine="";
-                int pos1=e.toString().indexOf("(sum): ");
 
-                /*for (int i=0;i<channels.size();i++){
-                   chaine =channels.get(i).getChannel();
-                    Toast.makeText(getContext(),"Chaine: "+chaine+"\n"+"program : "+channels.get(i).getProgram()+"",Toast.LENGTH_SHORT).show();
-
-
-                }*/
-                // Toast.makeText(getContext(),"Chaine: "+chaine+"\n"+"program : "+e.getData().toString()+"",Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onNothingSelected() {
-
-            }
-        });
 
 
         return rootView;
@@ -180,13 +155,26 @@ public class FragProgVues extends Fragment {
 
 
         }
-        BarDataSet set = new BarDataSet(yVals,"teles chaines");
+        BarDataSet set = new BarDataSet(yVals,"Program Views");
         set.setColors(ColorTemplate.MATERIAL_COLORS);
         set.setDrawValues(true);
         BarData data=new BarData(set);
         data.setBarWidth(barWidth);
         barChart.setData(data);
         barChart.invalidate();
+        barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+
+                Toast.makeText(getContext(),"Program: "+historiquePrgrams.get((int)h.getX()).getNom_program(),Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
         barChart.animateY(500);
 
 
@@ -203,7 +191,7 @@ public class FragProgVues extends Fragment {
             xEntrys.add(historiquePrgrams.get(i).getNom_program());
         }
         //create the data set
-        PieDataSet pieDataSet=new PieDataSet(yEntrys,"Teles Chaines");
+        PieDataSet pieDataSet=new PieDataSet(yEntrys,"Program Views");
         pieDataSet.setSliceSpace(2);
         pieDataSet.setValueTextSize(12);
         //add Colors to dataSet
@@ -224,8 +212,21 @@ public class FragProgVues extends Fragment {
         //create Pie data object
         PieData pieData=new PieData(pieDataSet);
         pieChart.setData(pieData);
-        pieChart.invalidate();
+        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
 
+                Toast.makeText(getContext(),"Program: "+historiquePrgrams.get((int)h.getX()).getNom_program(),Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+        pieChart.invalidate();
+        pieChart.animateY(500);
     }
 
     private void fetchLocations() {

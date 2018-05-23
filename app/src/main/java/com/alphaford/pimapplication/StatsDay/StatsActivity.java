@@ -25,9 +25,7 @@ import com.alphaford.pimapplication.R;
 
 import com.alphaford.pimapplication.WatcherActivity;
 import com.alphaford.pimapplication.YoutubeStatisticActivity;
-import com.github.nkzawa.emitter.Emitter;
-import com.github.nkzawa.socketio.client.IO;
-import com.github.nkzawa.socketio.client.Socket;
+
 
 import org.json.JSONObject;
 
@@ -51,13 +49,7 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
         private ViewPager mViewPager;
         private DrawerLayout mDrawerLayout;
         ImageButton refresh;
-    Socket socket;
-    private Socket mSocket;
-    {
-        try {
-            mSocket = IO.socket("http://192.168.1.2:8088");
-        } catch (URISyntaxException e) {}
-    }
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -153,38 +145,7 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
             return true;
         }
 
-    private Emitter.Listener onNewMessage = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                  JSONObject data = (JSONObject) args[0];
-                    Log.d("socket reslt","sockeeeeeeet");
 
-                 Log.d("socket reslt",data.toString());
-                }
-            });
-        }
-
-
-    };
-    private Emitter.Listener onNewEvent = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                //    JSONObject data = (JSONObject) args[0];
-                    Log.d("socket reslt","sockeeeeeeet");
-
-                //    Log.d("socket reslt",data.toString());
-                }
-            });
-        }
-
-
-    };
         /**
          * A placeholder fragment containing a simple view.
          */
@@ -228,13 +189,13 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
             public CharSequence getPageTitle(int position) {
                 switch (position) {
                     case 0:
-                        return "Channel/Min";
+                        return "Ch/Min";
                     case 1:
-                        return "Channel/Vues";
+                        return "Ch/Views";
                     case 2:
                         return "Prog/Min";
                     case 3 :
-                        return "Prog/Vues";
+                        return "Prog/Views";
                 }
                 return null;
             }

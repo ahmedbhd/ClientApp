@@ -137,27 +137,27 @@ public class FragChannelVues extends android.support.v4.app.Fragment {
         }*/
         Log.d("liste history",locations.toString());
 
-        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, Highlight h) {
-                String chaine="";
-                int pos1=e.toString().indexOf("(sum): ");
-
-                /*for (int i=0;i<channels.size();i++){
-                   chaine =channels.get(i).getChannel();
-                    Toast.makeText(getContext(),"Chaine: "+chaine+"\n"+"program : "+channels.get(i).getProgram()+"",Toast.LENGTH_SHORT).show();
-
-
-                }*/
-                // Toast.makeText(getContext(),"Chaine: "+chaine+"\n"+"program : "+e.getData().toString()+"",Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onNothingSelected() {
-
-            }
-        });
+//        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+//            @Override
+//            public void onValueSelected(Entry e, Highlight h) {
+//                String chaine="";
+//                int pos1=e.toString().indexOf("(sum): ");
+//
+//                /*for (int i=0;i<channels.size();i++){
+//                   chaine =channels.get(i).getChannel();
+//                    Toast.makeText(getContext(),"Chaine: "+chaine+"\n"+"program : "+channels.get(i).getProgram()+"",Toast.LENGTH_SHORT).show();
+//
+//
+//                }*/
+//                // Toast.makeText(getContext(),"Chaine: "+chaine+"\n"+"program : "+e.getData().toString()+"",Toast.LENGTH_SHORT).show();
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected() {
+//
+//            }
+//        });
 
 
         return rootView;
@@ -192,14 +192,27 @@ public class FragChannelVues extends android.support.v4.app.Fragment {
 
 
         }
-        BarDataSet set = new BarDataSet(yVals,"teles chaines");
+        BarDataSet set = new BarDataSet(yVals,"Channel Views");
         set.setColors(ColorTemplate.MATERIAL_COLORS);
         set.setDrawValues(true);
         BarData data=new BarData(set);
         data.setBarWidth(barWidth);
         barChart.setData(data);
+        barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+
+                Toast.makeText(getContext(),"Channel: "+historiqueChaines.get((int)h.getX()).getNom_chaine(),Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
         barChart.invalidate();
-        barChart.animateY(500);
+        barChart.animateY(3000);
 
 
     }
@@ -215,7 +228,7 @@ public class FragChannelVues extends android.support.v4.app.Fragment {
             xEntrys.add(historiqueChaines.get(i).getNom_chaine());
         }
         //create the data set
-        PieDataSet pieDataSet=new PieDataSet(yEntrys,"Teles Chaines");
+        PieDataSet pieDataSet=new PieDataSet(yEntrys,"Channel Views");
         pieDataSet.setSliceSpace(2);
         pieDataSet.setValueTextSize(12);
         //add Colors to dataSet
@@ -236,7 +249,22 @@ public class FragChannelVues extends android.support.v4.app.Fragment {
         //create Pie data object
         PieData pieData=new PieData(pieDataSet);
         pieChart.setData(pieData);
+
+        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+
+                 Toast.makeText(getContext(),"Channel: "+historiqueChaines.get((int)h.getX()).getNom_chaine(),Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
         pieChart.invalidate();
+        pieChart.animateY(3000);
 
     }
 

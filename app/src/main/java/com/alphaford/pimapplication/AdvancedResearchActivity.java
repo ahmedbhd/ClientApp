@@ -40,9 +40,12 @@ import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
@@ -216,14 +219,27 @@ public class AdvancedResearchActivity extends AppCompatActivity implements Navig
 
 
         }
-        BarDataSet set = new BarDataSet(yVals,"teles chaines");
+        BarDataSet set = new BarDataSet(yVals,"Channel Views");
         set.setColors(ColorTemplate.MATERIAL_COLORS);
         set.setDrawValues(true);
         BarData data=new BarData(set);
         data.setBarWidth(barWidth);
         barChart.setData(data);
+        barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+
+                Toast.makeText(getApplicationContext(),"Channel: "+historiqueChaines.get((int)h.getX()).getNom_chaine(),Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
         barChart.invalidate();
-        barChart.animateY(500);
+        barChart.animateY(5000);
 
 
     }
@@ -239,7 +255,7 @@ public class AdvancedResearchActivity extends AppCompatActivity implements Navig
             xEntrys.add(historiqueChaines.get(i).getNom_chaine());
         }
         //create the data set
-        PieDataSet pieDataSet=new PieDataSet(yEntrys,"Teles Chaines");
+        PieDataSet pieDataSet=new PieDataSet(yEntrys,"Channel Views");
         pieDataSet.setSliceSpace(2);
         pieDataSet.setValueTextSize(12);
         //add Colors to dataSet
@@ -260,8 +276,21 @@ public class AdvancedResearchActivity extends AppCompatActivity implements Navig
         //create Pie data object
         PieData pieData=new PieData(pieDataSet);
         pieChart.setData(pieData);
-        pieChart.invalidate();
+        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
 
+                Toast.makeText(getApplicationContext(),"Channel: "+historiqueChaines.get((int)h.getX()).getNom_chaine(),Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+        pieChart.invalidate();
+        pieChart.animateY(5000);
     }
 
     public void checkRadioButton(View view){
@@ -282,7 +311,7 @@ public class AdvancedResearchActivity extends AppCompatActivity implements Navig
                 fetchLocations("region");
             });
         }
-        if (radioButton.getText().equals("Membre Family"))
+        if (radioButton.getText().equals("Family Membres"))
         {
             layoutNombre.setVisibility(View.VISIBLE);
             search.setOnClickListener(v -> {

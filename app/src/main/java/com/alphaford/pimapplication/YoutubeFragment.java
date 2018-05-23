@@ -34,9 +34,12 @@ import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
@@ -158,7 +161,20 @@ public class YoutubeFragment extends android.support.v4.app.Fragment {
         data.setBarWidth(barWidth);
         barChart.setData(data);
         barChart.invalidate();
-        barChart.animateY(500);
+        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+
+                Toast.makeText(getContext(),"Channel: "+historiqueChaines.get((int)h.getX()).getNom_chaine(),Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+        barChart.animateY(5000);
 
 
     }
@@ -207,7 +223,21 @@ public class YoutubeFragment extends android.support.v4.app.Fragment {
         //create Pie data object
         PieData pieData=new PieData(pieDataSet);
         pieChart.setData(pieData);
+        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+
+                Toast.makeText(getContext(),"Channel: "+historiqueChaines.get((int)h.getX()).getNom_chaine(),Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
         pieChart.invalidate();
+        pieChart.animateY(5000);
 
     }
 
