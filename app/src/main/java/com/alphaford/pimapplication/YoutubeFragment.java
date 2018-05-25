@@ -161,12 +161,18 @@ public class YoutubeFragment extends android.support.v4.app.Fragment {
         data.setBarWidth(barWidth);
         barChart.setData(data);
         barChart.invalidate();
-        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+        barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
 
-                Toast.makeText(getContext(),"Channel: "+historiqueChaines.get((int)h.getX()).getNom_chaine(),Toast.LENGTH_SHORT).show();
+                if (radioButton.getText().equals("Channels"))
+                {
+                    Toast.makeText(getContext(),"Channel: "+historiqueChaines.get((int)h.getX()).getNom_chaine(),Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getContext(),"Program: "+historiqueChaines.get((int)h.getX()).getNom_chaine(),Toast.LENGTH_SHORT).show();
 
+                }
             }
 
             @Override
@@ -227,7 +233,14 @@ public class YoutubeFragment extends android.support.v4.app.Fragment {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
 
-                Toast.makeText(getContext(),"Channel: "+historiqueChaines.get((int)h.getX()).getNom_chaine(),Toast.LENGTH_SHORT).show();
+                if (radioButton.getText().equals("Channels"))
+                {
+                    Toast.makeText(getContext(),"Channel: "+historiqueChaines.get((int)h.getX()).getNom_chaine(),Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getContext(),"Program: "+historiqueChaines.get((int)h.getX()).getNom_chaine(),Toast.LENGTH_SHORT).show();
+
+                }
 
             }
 

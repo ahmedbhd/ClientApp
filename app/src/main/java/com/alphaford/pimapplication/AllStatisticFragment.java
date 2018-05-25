@@ -83,6 +83,7 @@ public class AllStatisticFragment extends Fragment {
     private List<History> channels;
     private List<History> channelsfiltered;
     private List<History> programsfiltered;
+    private List<History> programsfilteredyou = new ArrayList<>();
 
     private List<historiqueChaine> historiqueChaines;
     private ArrayList <historiqueChaine> listdbviewsch = new ArrayList<>();
@@ -172,39 +173,6 @@ public class AllStatisticFragment extends Fragment {
 
         Log.d(" viewdb",viewsdb.toString());
         Log.d("historique in line",historiqueChaines.toString());
-//        ArrayList<String> xAxes = new ArrayList<>();
-//        ArrayList<Entry> yAxessin = new ArrayList<>();
-//        ArrayList<Entry> yAxescons = new ArrayList<>();
-//        double x = 0;
-//        int numDataPoints = 1000;
-//        for (int i = 0 ; i<numDataPoints;i++){
-//            float sinFunction = Float.parseFloat(String.valueOf(Math.sin(x)));
-//            float cosFunction = Float.parseFloat(String.valueOf(Math.cos(x)));
-//            x = x + 0.1;
-//            yAxessin.add(new Entry(sinFunction,i));
-//            yAxescons.add(new Entry(cosFunction,i));
-//            xAxes.add(i , String.valueOf(x));
-//        }
-//        String[] xaxes = new String[xAxes.size()];
-//        for (int i=0 ; i<xAxes.size(); i++){
-//            xaxes[i] = xAxes.get(i).toString();
-//
-//        }
-//        ArrayList<ILineDataSet> lineDataSets = new ArrayList<>();
-//        LineDataSet lineDataSet = new LineDataSet(yAxescons, "cos");
-//        lineDataSet.setDrawCircles(false);
-//        lineDataSet.setColor(Color.BLUE);
-//
-//        LineDataSet lineDataSet1 = new LineDataSet(yAxessin,"sin");
-//        lineDataSet1.setDrawCircles(false);
-//        lineDataSet1.setColor(Color.RED);
-//        lineDataSets.add(lineDataSet);
-//        lineDataSets.add(lineDataSet1);
-//        lineChart.setData(new LineData(lineDataSets));
-//        lineChart.setVisibleXRangeMaximum(65f);
-
-
-        //Collections.sort(listdbviewsch, (o1, o2) -> o2.getNbr_teles()-(o1.getNbr_teles()));
 
         ArrayList<Entry> yValue1 = new ArrayList<>();
 
@@ -220,18 +188,6 @@ public class AllStatisticFragment extends Fragment {
             }
         }
 
-//        if (count>10) {
-//            for (int i = 0; i < 10; i++) {
-//                int val = listdbviewsch.get(i).getNbr_teles();
-//                yValue1.add(new Entry(i, val));
-//            }
-//        }else{
-//            for (int i = 0; i < count; i++) {
-//                int val = listdbviewsch.get(i).getNbr_teles();
-//                yValue1.add(new Entry(i, val));
-//            }
-//        }
-//        Log.d("list db ",listdbviewsch.toString());
         ArrayList<Entry> yValue2 = new ArrayList<>();
 
         if (count>10) {
@@ -260,7 +216,8 @@ public class AllStatisticFragment extends Fragment {
         LineData data = new LineData(set1,set2);
 
         lineChart.setData(data);
-
+        lineChart.invalidate();
+        lineChart.animateX(500);
 
     }
 
@@ -368,7 +325,6 @@ public class AllStatisticFragment extends Fragment {
 
     private final com.android.volley.Response.Listener<String> onPostsLoaded2 = response -> {
 
-        Type listType = new TypeToken<List<History>>() {}.getType();
 
         JSONArray jsonArray = new JSONArray();
         JSONObject objJson = new JSONObject();
@@ -521,9 +477,11 @@ public class AllStatisticFragment extends Fragment {
             JSONObject objJson = new JSONObject();
             Log.d("filling the charts",response);
             channels.clear();
-            historiqueChaines.clear();
+            //historiqueChaines.clear();
             channelsfiltered.clear();
             listdbviewsprog.clear();
+            programsfiltered.clear();
+            programsfilteredyou.clear();
             try {
                 jsonArray = new JSONArray(response);
                 //Log.d("json aray",jsonArray.toString());
@@ -555,6 +513,16 @@ public class AllStatisticFragment extends Fragment {
                 if(!ch.contains(channels.get(i).getProgram())){
                     ch.add(channels.get(i).getProgram());
                     programsfiltered.add(channels.get(i));
+                }
+
+            }
+            if (historiqueChaines.size()>0){
+                int j =0;
+                for (int i =0;i< programsfiltered.size();i++) {
+                    if (programsfiltered.get(i).getChannel().equals(historiqueChaines.get(j).getNom_chaine())){
+                        programsfilteredyou.add(programsfiltered.get(i));
+                        j++;
+                    }
                 }
 
             }
@@ -651,7 +619,6 @@ public class AllStatisticFragment extends Fragment {
 
     private final com.android.volley.Response.Listener<JSONArray > onPostsLoadedchutub = response -> {
 
-        Type listType = new TypeToken<List<History>>() {}.getType();
 
         historiqueChaines.clear();
         Log.d("youtube channel",response.toString());
@@ -706,13 +673,19 @@ public class AllStatisticFragment extends Fragment {
         JSONArray jsonArray = new JSONArray();
 
         try{
-            for (int i = 0; i < programsfiltered.size(); i++) {
+            List<History> l = new ArrayList<>();
+            if (programsfilteredyou.size()>0){
+                l = programsfilteredyou;
+            }
+            else
+                l= programsfiltered;
+            for (int i = 0; i < l.size(); i++) {
 
                 JSONObject jsonBodyObj = new JSONObject();
 
 
-                jsonBodyObj.put("channel", programsfiltered.get(i).getChannel());
-                jsonBodyObj.put("program", programsfiltered.get(i).getProgram());
+                jsonBodyObj.put("channel", l.get(i).getChannel());
+                jsonBodyObj.put("program", l.get(i).getProgram());
 
                 jsonArray.put(jsonBodyObj);
 
@@ -723,7 +696,7 @@ public class AllStatisticFragment extends Fragment {
         }
 
         final String requestBody = jsonArray.toString();
-        Log.d("json body",requestBody);
+        Log.d("json body prog",requestBody);
         JsonArrayRequest request = new JsonArrayRequest (Request.Method.POST, cnx.getPath(":5000/program"),null, onPostsLoadedprogutub, onPostsError3)
         {
             @Override
@@ -748,7 +721,7 @@ public class AllStatisticFragment extends Fragment {
 
         };
         request.setRetryPolicy(new DefaultRetryPolicy(
-                5000000,
+                999999999,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(request);
