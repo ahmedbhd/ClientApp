@@ -9,7 +9,7 @@ public class historiqueChaine {
     private int nbr_teles;
     private String nom_bouquet;
     private Long nb_minute;
-
+    int Duree;
     public historiqueChaine(String nom_chaine, long nb_minute) {
         this.nom_chaine = nom_chaine;
         this.nb_minute = nb_minute;

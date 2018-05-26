@@ -1,5 +1,7 @@
 package com.alphaford.pimapplication.Models;
 
+import org.joda.time.DateTime;
+
 import java.util.Date;
 
 /**
@@ -12,7 +14,8 @@ public class History {
     String bouquet;
     String channel;
     String program;
-    Date date;
+    DateTime date;
+    int Duree;
 
     public String getChannel() {
         return channel;
@@ -38,11 +41,11 @@ public class History {
         this.recepteur = recepteur;
     }
 
-    public Date getDate() {
+    public DateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(DateTime date) {
         this.date = date;
     }
 
@@ -54,7 +57,7 @@ public class History {
         this._id = id;
     }
 
-    public History(String channel, String program, String recepteur, Date date, String id) {
+    public History(String channel, String program, String recepteur, DateTime date, String id) {
         this.channel = channel;
         this.program = program;
         this.recepteur = recepteur;
@@ -62,7 +65,7 @@ public class History {
         this._id = id;
     }
 
-    public History(String _id, String recepteur, String bouquet, String channel, String program, Date date) {
+    public History(String _id, String recepteur, String bouquet, String channel, String program, DateTime date) {
         this._id = _id;
         this.recepteur = recepteur;
         this.bouquet = bouquet;
@@ -71,7 +74,7 @@ public class History {
         this.date = date;
     }
 
-    public History(String recepteur, String bouquet, String channel, String program, Date date) {
+    public History(String recepteur, String bouquet, String channel, String program, DateTime date) {
         this.recepteur = recepteur;
         this.bouquet = bouquet;
         this.channel = channel;
@@ -113,13 +116,24 @@ public class History {
     public History() {
     }
 
+    public History(String recepteur, String bouquet, String channel, String program, int duree) {
+        this.recepteur = recepteur;
+        this.bouquet = bouquet;
+        this.channel = channel;
+        this.program = program;
+        Duree = duree;
+    }
+
     @Override
     public String toString() {
         return "History{" +
-                "recepteur='" + recepteur + '\'' +
+                "_id='" + _id + '\'' +
+                ", recepteur='" + recepteur + '\'' +
                 ", bouquet='" + bouquet + '\'' +
                 ", channel='" + channel + '\'' +
                 ", program='" + program + '\'' +
+                ", date=" + date +
+                ", Duree=" + Duree +
                 '}';
     }
 }

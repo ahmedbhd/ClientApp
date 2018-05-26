@@ -318,7 +318,7 @@ public class FragChannelVues extends android.support.v4.app.Fragment {
         try {
             jsonArray = new JSONArray(response);
             //Log.d("json aray",jsonArray.toString());
-
+            int j=0;
             for (int i = 0; i < jsonArray.length(); i++) {
 
                 objJson = jsonArray.getJSONObject(i);
@@ -329,18 +329,22 @@ public class FragChannelVues extends android.support.v4.app.Fragment {
                 String bouquet = objJson.getString("bouquet");
                 String channel = objJson.getString("channel");
                 String program = objJson.getString("program");
-                //Date date = objJson.get
-                History h =new History(recepteur,bouquet,channel,program);
-                //Log.d("h",h.toString());
-                if (checkIfMyRecep(recepteur))
-                    channels.add(h);
+                double duree = objJson.getDouble("duree");
+                if (duree>0)
+                    Log.d("this is history", objJson.toString());
 
+                //Date date = objJson.get
+                History h =new History(recepteur,bouquet,channel,program,(int)duree);
+                //Log.d("h",h.toString());
+                if (checkIfMyRecep(recepteur)) {
+                    channels.add(h);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        //Log.d("liste history",channels.toString());
+       // Log.d("liste new history",channels.toString());
         List<String> ch = new ArrayList<>();
         int count=0;
 
@@ -354,6 +358,7 @@ public class FragChannelVues extends android.support.v4.app.Fragment {
             if(!ch.contains(channels.get(i).getChannel())){
                 ch.add(channels.get(i).getChannel());
                 historiqueChaines.add(new historiqueChaine(channels.get(i).getChannel(),count));
+
             }
             count=0;
         }

@@ -282,7 +282,7 @@ public class FragProgMin extends android.support.v4.app.Fragment {
 //                    } catch (ParseException e) {
 //                        e.printStackTrace();
 //                    }
-                    History h =new History(recepteur,bouquet,channel,program,dateDebutChaine);
+                    History h =new History(recepteur,bouquet,channel,program/*,dateDebutChaine*/);
                     //Log.d("h",h.toString());
                     channels.add(h);
 
@@ -296,21 +296,21 @@ public class FragProgMin extends android.support.v4.app.Fragment {
             long nb_minute=0;
             long nbMinuteTot=0;
 
-            for (int i=0 ;i<channels.size();i++){
-                for (int j=0 ;j<channels.size();j++){
-                    if( (channels.get(i).getProgram().equals(channels.get(j).getProgram()))){
-                        dateFinChaine = channels.get(j+1).getDate();
-                        nb_minute=DifferenceBetweenDate(channels.get(j).getDate(),dateFinChaine);
-                        nbMinuteTot = nbMinuteTot + nb_minute;
-                    }
-                }
-                if(!ch.contains(channels.get(i).getProgram())){
-                    ch.add(channels.get(i).getProgram());
-
-                    historiquePrgrams.add(new Program(channels.get(i).getProgram(),nbMinuteTot));
-                }
-                nbMinuteTot=0;
-            }
+//            for (int i=0 ;i<channels.size();i++){
+//                for (int j=0 ;j<channels.size();j++){
+//                    if( (channels.get(i).getProgram().equals(channels.get(j).getProgram()))){
+//                        dateFinChaine = channels.get(j+1).getDate();
+//                        nb_minute=DifferenceBetweenDate(channels.get(j).getDate(),dateFinChaine);
+//                        nbMinuteTot = nbMinuteTot + nb_minute;
+//                    }
+//                }
+//                if(!ch.contains(channels.get(i).getProgram())){
+//                    ch.add(channels.get(i).getProgram());
+//
+//                    historiquePrgrams.add(new Program(channels.get(i).getProgram(),nbMinuteTot));
+//                }
+//                nbMinuteTot=0;
+//            }
             Log.d("his",historiquePrgrams.toString());
             //Log.d("ch",ch.toString());
             addDataPie();
