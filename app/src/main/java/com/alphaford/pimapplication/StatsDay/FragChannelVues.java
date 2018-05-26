@@ -329,12 +329,12 @@ public class FragChannelVues extends android.support.v4.app.Fragment {
                 String bouquet = objJson.getString("bouquet");
                 String channel = objJson.getString("channel");
                 String program = objJson.getString("program");
-                double duree = objJson.getDouble("duree");
+                int duree = objJson.getInt("duree");
                 if (duree>0)
                     Log.d("this is history", objJson.toString());
 
                 //Date date = objJson.get
-                History h =new History(recepteur,bouquet,channel,program,(int)duree);
+                History h =new History(recepteur,bouquet,channel,program,duree);
                 //Log.d("h",h.toString());
                 if (checkIfMyRecep(recepteur)) {
                     channels.add(h);
