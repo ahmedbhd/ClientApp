@@ -136,6 +136,7 @@ public class FragChannelVues extends android.support.v4.app.Fragment {
             e.printStackTrace();
         }*/
         Log.d("liste history",locations.toString());
+<<<<<<< Updated upstream
 
 //        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
 //            @Override
@@ -158,6 +159,43 @@ public class FragChannelVues extends android.support.v4.app.Fragment {
 //
 //            }
 //        });
+=======
+        barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                String chaine="";
+                int pos1=e.toString().indexOf("(sum): ");
+                int index = Math.round(h.getX());
+                System.out.println("chaaaine"+index);
+                chaine = historiqueChaines.get(index).getNom_chaine();
+                System.out.println("Chaneeel name"+chaine);
+                Toast.makeText(getContext(),"Channel : "+chaine,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                String chaine="";
+                int pos1=e.toString().indexOf("(sum): ");
+                int index = Math.round(h.getX());
+                System.out.println("chaaaine"+index);
+                chaine = historiqueChaines.get(index).getNom_chaine();
+                System.out.println("Chaneeel name"+chaine);
+                Toast.makeText(getContext(),"Channel : "+chaine,Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+>>>>>>> Stashed changes
 
 
         return rootView;

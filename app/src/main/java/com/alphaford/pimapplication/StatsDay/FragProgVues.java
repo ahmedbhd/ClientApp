@@ -115,9 +115,51 @@ public class FragProgVues extends Fragment {
         fetchrecepteurs();
 
         fetchLocations();
+<<<<<<< Updated upstream
 
 
 
+=======
+        /*try {
+            CallSocket();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }*/
+
+        barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                int pos1=e.toString().indexOf("(sum): ");
+                String prog="";
+                int index = Math.round(h.getX());
+                System.out.println("chaaaine"+index);
+                prog = historiquePrgrams.get(index).getNom_program();
+                Toast.makeText(getContext(),"Program : "+prog,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+
+        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                int pos1=e.toString().indexOf("(sum): ");
+                String prog="";
+                int index = Math.round(h.getX());
+                System.out.println("chaaaine"+index);
+                prog = historiquePrgrams.get(index).getNom_program();
+                Toast.makeText(getContext(),"Program : "+prog,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+>>>>>>> Stashed changes
 
 
         return rootView;

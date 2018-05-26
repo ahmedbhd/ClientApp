@@ -23,18 +23,21 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
+
+
             <SearchView
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
                 android:id="@+id/searchBar"
-                android:queryHint="Search Channel .."
-                android:background="@color/iron"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/colorPrimary"
                 android:gravity="center"
-                android:layout_marginRight="25dp"
-                >
+                android:layoutDirection="rtl"
+                android:queryHint="Search Channel ..">
+
             </SearchView>
+
 
         </android.support.v7.widget.Toolbar>
 
@@ -75,9 +78,9 @@
 
 
                     <ListView
+                        android:id="@+id/listeChaine"
                         android:layout_width="match_parent"
-                        android:layout_height="260dp"
-                        android:id="@+id/listeChaine">
+                        android:layout_height="275dp">
 
                     </ListView>
                     <View
@@ -86,31 +89,33 @@
                         android:layout_marginRight="4dp"
                         android:layout_marginLeft="4dp"
                         android:background="@color/aluminum" />
+
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:orientation="vertical"
                         android:id="@+id/layoutWatcher"
-                        android:layout_margin="5dp"
-                        android:layout_marginTop="15dp"
-                        android:visibility="invisible"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
                         android:layout_gravity="bottom"
-                        >
+                        android:layout_marginTop="15dp"
+                        android:orientation="vertical"
+                        android:visibility="invisible">
 
                         <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
                             android:id="@+id/seuil_vues"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:hint="Seuil Vues"
                             android:inputType="number"
-                            android:hint="Seuil Vues"/>
+                            android:background="@drawable/edit_text"
+                            android:layout_margin="4dp"/>
+
                         <Button
+                            android:id="@+id/submit_seuil"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/submit_seuil"
-                            android:text="Submit"
                             android:layout_gravity="center"
                             android:background="@drawable/button_one"
-                            />
+                            android:text="Submit"
+                            android:layout_marginTop="6dp"/>
 
                     </LinearLayout>
 

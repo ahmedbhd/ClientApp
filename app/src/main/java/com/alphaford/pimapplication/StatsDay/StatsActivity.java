@@ -1,6 +1,8 @@
 package com.alphaford.pimapplication.StatsDay;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -18,9 +20,11 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 
 import com.alphaford.pimapplication.AdvancedResearchActivity;
+import com.alphaford.pimapplication.LoginActivity;
 import com.alphaford.pimapplication.R;
 
 import com.alphaford.pimapplication.WatcherActivity;
@@ -33,6 +37,7 @@ import java.net.URISyntaxException;
 
 
 public class StatsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+<<<<<<< Updated upstream
         /**
          * The {@link android.support.v4.view.PagerAdapter} that will provide
          * fragments for each of the sections. We use a
@@ -55,44 +60,81 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_stats);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+=======
+    /**
+     * The {@link android.support.v4.view.PagerAdapter} that will provide
+     * fragments for each of the sections. We use a
+     * {@link FragmentPagerAdapter} derivative, which will keep every
+     * loaded fragment in memory. If this becomes too memory intensive, it
+     * may be best to switch to a
+     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     */
+    private StatsActivity.SectionsPagerAdapter mSectionsPagerAdapter;
+
+    /**
+     * The {@link ViewPager} that will host the section contents.
+     */
+    private ViewPager mViewPager;
+    private DrawerLayout mDrawerLayout;
+    String permissionClient="";
+    ImageButton refresh;
+    public SharedPreferences sharedPreferences;
+    SharedPreferences.Editor ed ;
+    Socket socket;
+    private Socket mSocket;
+    {
+        try {
+            mSocket = IO.socket("http://192.168.1.2:8088");
+        } catch (URISyntaxException e) {}
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_stats);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+>>>>>>> Stashed changes
 //            mSocket.connect();
 //            mSocket.on("output", onNewMessage);
 //            mSocket.on("eveneeeennt", onNewEvent);
-            setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
+        sharedPreferences = getSharedPreferences("myPref", Context.MODE_PRIVATE);
+        ed = sharedPreferences.edit();
+        permissionClient = sharedPreferences.getString("permission",null);
 
 
 
-            // Create the adapter that will return a fragment for each of the three
-            // primary sections of the activity.
-            mSectionsPagerAdapter = new StatsActivity.SectionsPagerAdapter(getSupportFragmentManager());
 
-            // Set up the ViewPager with the sections adapter.
-            mViewPager = (ViewPager) findViewById(R.id.container);
-            mViewPager.setAdapter(mSectionsPagerAdapter);
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity.
+        mSectionsPagerAdapter = new StatsActivity.SectionsPagerAdapter(getSupportFragmentManager());
 
-            TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-            tabLayout.setupWithViewPager(mViewPager);
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-            drawer.addDrawerListener(toggle);
-            toggle.syncState();
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
 
-
-            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-            navigationView.setNavigationItemSelectedListener(this);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(mViewPager);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+    }
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
-        @Override
-        public void onBackPressed() {
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            if (drawer.isDrawerOpen(GravityCompat.START)) {
-                drawer.closeDrawer(GravityCompat.START);
-            } else {
-                super.onBackPressed();
-            }
-        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -108,28 +150,42 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
 
         return super.onOptionsItemSelected(item);
     }
-        @SuppressWarnings("StatementWithEmptyBody")
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            int id = item.getItemId();
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
 
-            if (id == R.id.general_statistic) {
+        if (id == R.id.general_statistic) {
 
-            }  else if (id == R.id.advanced_research) {
-               Intent i=new Intent(StatsActivity.this, AdvancedResearchActivity.class);
-                startActivity(i);
+        }  else if (id == R.id.advanced_research) {
+            Intent i = new Intent(StatsActivity.this, AdvancedResearchActivity.class);
+            startActivity(i);
+            if (permissionClient.equals("2") || permissionClient.equals("3")) {
+            }else {
 
-
-            }  else if (id == R.id.youtube_statistic) {
-                Intent i=new Intent(StatsActivity.this, YoutubeStatisticActivity.class);
-                startActivity(i);
-
-            } else if (id == R.id.watcher) {
-                 Intent i=new Intent(StatsActivity.this, WatcherActivity.class);
-                startActivity(i);
+                Toast.makeText(StatsActivity.this, "Permission denied", Toast.LENGTH_LONG).show();
 
             }
-            else if (id == R.id.disconnect) {
+
+        }  else if (id == R.id.youtube_statistic) {
+            if (!permissionClient.equals("3")) {
+                Toast.makeText(StatsActivity.this, "Permission denied", Toast.LENGTH_LONG).show();
+            }else {
+                Intent i = new Intent(StatsActivity.this, YoutubeStatisticActivity.class);
+                startActivity(i);
+            }
+
+        } else if (id == R.id.watcher) {
+            if (permissionClient.equals("2") || permissionClient.equals("3")) {
+                Intent i = new Intent(StatsActivity.this, WatcherActivity.class);
+                startActivity(i);
+            }else {
+
+                Toast.makeText(StatsActivity.this, "Permission denied", Toast.LENGTH_LONG).show();
+
+            }
+        }
+        else if (id == R.id.disconnect) {
                  /* Intent  i = new Intent(HomeActivity.this, LoginActivity.class);
                 sharedPref = this.getSharedPreferences( "myPref", MODE_PRIVATE);
                 editor = sharedPref.edit();
@@ -138,53 +194,92 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
                 editor.commit();
                 startActivity(i);*/
 
-            }
-
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            drawer.closeDrawer(GravityCompat.START);
-            return true;
         }
 
+<<<<<<< Updated upstream
 
         /**
          * A placeholder fragment containing a simple view.
          */
+=======
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 
+    private Emitter.Listener onNewMessage = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject data = (JSONObject) args[0];
+                    Log.d("socket reslt","sockeeeeeeet");
 
-        /**
-         * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-         * one of the sections/tabs/pages.
-         */
-        public static class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-            public SectionsPagerAdapter(FragmentManager fm) {
-                super(fm);
-            }
-
-            @Override
-            public Fragment getItem(int position) {
-                switch (position){
-                    case 0 :
-                        FragChannelMin f2 =new FragChannelMin();
-                        return f2;
-                    case 1 : FragChannelVues f =new FragChannelVues();
-                        return f;
-                    case 2 : FragProgMin f3 =new FragProgMin();
-                        return f3;
-                    case 3 : FragProgVues f4 =new FragProgVues();
-                        return f4;
-
-                    default: return null;
-
+                    Log.d("socket reslt",data.toString());
                 }
-            }
+            });
+        }
 
-            @Override
-            public int getCount() {
-                // Show 3 total pages.
-                return 4;
-            }
 
+    };
+    private Emitter.Listener onNewEvent = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //    JSONObject data = (JSONObject) args[0];
+                    Log.d("socket reslt","sockeeeeeeet");
+
+                    //    Log.d("socket reslt",data.toString());
+                }
+            });
+        }
+
+
+    };
+    /**
+     * A placeholder fragment containing a simple view.
+     */
+>>>>>>> Stashed changes
+
+
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    public static class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position){
+                case 0 :
+                    FragChannelMin f2 =new FragChannelMin();
+                    return f2;
+                case 1 : FragChannelVues f =new FragChannelVues();
+                    return f;
+                case 2 : FragProgMin f3 =new FragProgMin();
+                    return f3;
+                case 3 : FragProgVues f4 =new FragProgVues();
+                    return f4;
+
+                default: return null;
+
+            }
+        }
+
+        @Override
+        public int getCount() {
+            // Show 3 total pages.
+            return 4;
+        }
+
+<<<<<<< Updated upstream
             @Override
             public CharSequence getPageTitle(int position) {
                 switch (position) {
@@ -198,6 +293,21 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
                         return "Prog/Views";
                 }
                 return null;
+=======
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "Channel/Min";
+                case 1:
+                    return "Channel/Vues";
+                case 2:
+                    return "Prog/Min";
+                case 3 :
+                    return "Prog/Vues";
+>>>>>>> Stashed changes
             }
+            return null;
         }
+    }
 }

@@ -3,6 +3,7 @@ package com.alphaford.pimapplication;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -27,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity  {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
     EditText emailText,passwordText;
@@ -36,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     public SharedPreferences.Editor editor;
     public SharedPreferences sharedPref;
     ConnexionManager cnx = new ConnexionManager();
-
+    String permissionClient;
     String HttpUrl = cnx.getPath(":8080/api/authenticate");
     RequestQueue requestQueue;
 
@@ -78,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     return;
                 } else {
-                  ;
+                    ;
                     EmailHolder = emailText.getText().toString().trim();
                     PasswordHolder = passwordText.getText().toString().trim();
                     UserLogin();
@@ -178,37 +179,42 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(String ServerResponse) {
 
 
-                       // if(!ServerResponse.equalsIgnoreCase("no")) {
-                            try {
-                                JSONObject jsonObject = new JSONObject(ServerResponse);
-                                success= jsonObject.getString("success");
+                        // if(!ServerResponse.equalsIgnoreCase("no")) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(ServerResponse);
+                            success= jsonObject.getString("success");
 
-                                message = jsonObject.getString("message");
-                                if (message.equals("User authenticated!")){
-                                    //token=jsonObject.getString("token");
-                                    editor.putString("token", jsonObject.getString("token"));
-                                    editor.putString("username",jsonObject.getString("username"));
-                                    editor.putString("permission",jsonObject.getString("permission"));
-                                    editor.apply();
-                                    Log.d("token",token);
-                                }
-                                else{
-                                    Toast.makeText(LoginActivity.this, "Authentication failed", Toast.LENGTH_LONG).show();
-                                    emailText.setText("");
-                                    passwordText.setText("");
-                                }
+                            message = jsonObject.getString("message");
+                            if (message.equals("User authenticated!")){
+                                //token=jsonObject.getString("token");
+                                permissionClient=jsonObject.getString("permission");
+                                editor.putString("token", jsonObject.getString("token"));
+                                editor.putString("username",jsonObject.getString("username"));
+                                editor.putString("permission",jsonObject.getString("permission"));
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                                editor.apply();
+                                Log.d("token",token);
+                                Log.d("Permission",permissionClient);
+                                System.out.println("PEEEEEERM"+permissionClient);
+                            }
+                            else{
+                                Toast.makeText(LoginActivity.this, "Authentication failed", Toast.LENGTH_LONG).show();
+                                emailText.setText("");
+                                passwordText.setText("");
                             }
 
-
-
-                            Intent intent = new Intent(LoginActivity.this, StatsActivity.class);
-                            startActivity(intent);
-                            //finish();
-
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+
+
+
+                        Intent intent = new Intent(LoginActivity.this, StatsActivity.class);
+                        intent.putExtra("permission",permissionClient);
+                        startActivity(intent);
+                        //finish();
+
+                    }
 
 
 
@@ -266,5 +272,6 @@ public class LoginActivity extends AppCompatActivity {
 
         return valid;
     }
+
 }
 
