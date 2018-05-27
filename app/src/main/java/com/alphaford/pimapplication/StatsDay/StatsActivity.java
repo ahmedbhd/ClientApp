@@ -58,13 +58,7 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
     ImageButton refresh;
     public SharedPreferences sharedPreferences;
     SharedPreferences.Editor ed ;
-    Socket socket;
-    private Socket mSocket;
-    {
-        try {
-            mSocket = IO.socket("http://192.168.1.2:8088");
-        } catch (URISyntaxException e) {}
-    }
+   
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
