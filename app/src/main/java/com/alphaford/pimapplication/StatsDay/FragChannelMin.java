@@ -312,6 +312,7 @@ public class FragChannelMin extends android.support.v4.app.Fragment {
                 String bouquet = objJson.getString("bouquet");
                 String channel = objJson.getString("channel");
                 String program = objJson.getString("program");
+                int duree = objJson.getInt("duree");
                 //Date date = objJson.get
                 JSONObject date = objJson.getJSONObject("date");
                 Date d = new Date(date.getLong("value"));
@@ -324,7 +325,7 @@ public class FragChannelMin extends android.support.v4.app.Fragment {
 //                    e.printStackTrace();
 //                }
 //                Log.d("date value",dateDebutChaine.toString());
-                History h =new History(recepteur,bouquet,channel,program,dateTime);
+                History h =new History(recepteur,bouquet,channel,program,duree);
                 //  Log.d("date ta zebi",dateDebutChaine.toString());
                 if (checkIfMyRecep(recepteur))
                     channels.add(h);
@@ -335,20 +336,23 @@ public class FragChannelMin extends android.support.v4.app.Fragment {
        // Log.d("liste history",channels.toString());
         //Log.d("liste history",channels.toString());
         List<String> ch = new ArrayList<>();
-        long nb_minute=0;
+        int totaleDuree=0;
         long nbMinuteTot=0;
         //System.out.println("Sizzzzee"+channels.size());
         DateTime d = DateTime.now();
         for (int i=0 ;i<channels.size();i++){
-            for (int j=0 ;j<channels.size()-1;j++){
-                if( (channels.get(i).getChannel().equals(channels.get(j).getChannel()))){
-                    int k = j+1;
-                    dateFinChaine = channels.get(k).getDate();
+            for (int j=0 ;j<channels.size();j++){
+                if ((channels.get(i).getChannel().equals(channels.get(j).getChannel()))){
+                    totaleDuree= totaleDuree + channels.get(j).getDuree();
+                    System.out.println("dureeee"+totaleDuree+"channeel "+channels.get(j).getChannel());
+                    nbMinuteTot = TimeUnit.SECONDS.toMinutes(totaleDuree);
+                   // int k = j+1;
+                    // dateFinChaine = channels.get(k).getDate();
                     //nb_minute= DifferenceBetweenDate(channels.get(j).getDate(),dateFinChaine);
                     //long diffMinutes= d.getMillis() - channels.get(j).getDate().getMillis();
-                     long diffMinutes=dateFinChaine.getMillis() - channels.get(j).getDate().getMillis();
-                    nb_minute = TimeUnit.MILLISECONDS.toMinutes(diffMinutes);
-                    nbMinuteTot = nbMinuteTot + nb_minute;
+                     //long diffMinutes=dateFinChaine.getMillis() - channels.get(j).getDate().getMillis();
+                  //  nb_minute = TimeUnit.MILLISECONDS.toMinutes(diffMinutes);
+                  //  nbMinuteTot = nbMinuteTot + nb_minute;
                    // System.out.println("NBM"+nbMinuteTot+"nbbb"+nb_minute);
                 }
             }
@@ -356,7 +360,7 @@ public class FragChannelMin extends android.support.v4.app.Fragment {
                 ch.add(channels.get(i).getChannel());
                 historiqueChaines.add(new historiqueChaine(channels.get(i).getChannel(),nbMinuteTot));
             }
-            nbMinuteTot=0;
+            totaleDuree=0;
         }
         //Log.d("historique",historiqueChaines.toString());
 

@@ -25,9 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+
             <SearchView
                 android:id="@+id/searchBar"
                 android:layout_width="match_parent"
@@ -36,20 +34,10 @@
                 android:background="@color/colorPrimary"
                 android:gravity="center"
                 android:layoutDirection="rtl"
-                android:queryHint="Search Channel ..">
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="35dp"
-                    android:scaleType="fitXY"
-                    android:background="@color/colorPrimary"
-                    android:src="@drawable/mylogoredi"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"/>
-
+                android:queryHint="Search Channel .."
+                android:searchIcon="@drawable/research">
 
             </SearchView>
-            </RelativeLayout>
 
 
         </android.support.v7.widget.Toolbar>

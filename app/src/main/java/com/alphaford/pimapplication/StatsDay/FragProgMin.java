@@ -1,5 +1,6 @@
 package com.alphaford.pimapplication.StatsDay;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -9,12 +10,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.alphaford.pimapplication.ConnexionManager;
 import com.alphaford.pimapplication.LoginActivity;
 import com.alphaford.pimapplication.Models.Chaine;
 import com.alphaford.pimapplication.Models.History;
 import com.alphaford.pimapplication.Models.Program;
+import com.alphaford.pimapplication.Models.Recepteur;
 import com.alphaford.pimapplication.Models.historiqueChaine;
 import com.alphaford.pimapplication.R;
 import com.android.volley.AuthFailureError;
@@ -42,6 +45,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,6 +60,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 
 public class FragProgMin extends android.support.v4.app.Fragment {
@@ -64,21 +69,22 @@ public class FragProgMin extends android.support.v4.app.Fragment {
     SharedPreferences.Editor editor ;
     PieChart pieChart;
     BarChart barChart;
-    ArrayList<History> locations = new ArrayList<>();
 
+    ArrayList<Recepteur> recepteurs = new ArrayList<>();
+    @SuppressLint("SimpleDateFormat")
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+    Date dateDebutChaine = new Date();
+    DateTime dateFinChaine;
+    Chaine chaine;
     ConnexionManager cnx = new ConnexionManager();
 
-    String HttpUrl =cnx.getPath( ":8080/api/historys");
+    String HttpUrl = cnx.getPath(":8080/api/historys");
     RequestQueue requestQueue;
 
     RequestQueue queue ;
     GsonBuilder gsonBuilder;
     private List<History> channels;
-
-    private List<Program> historiquePrgrams;
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.ENGLISH);
-    Date dateDebutChaine = new Date();
-    Date dateFinChaine = new Date();
+    private List<historiqueChaine> historiqueChaines;
     private Gson gson;
     Socket socket;
     private Socket mSocket;
@@ -89,22 +95,20 @@ public class FragProgMin extends android.support.v4.app.Fragment {
     }
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_frag_stat_bouquet, container, false);
-        //mSocket.connect();
-        //mSocket.on("output", onNewMessage);
-
+        View rootView = inflater.inflate(R.layout.frag_stat2, container, false);
+        mSocket.connect();
+        mSocket.on("output", onNewMessage);
+        fetchrecepteurs();
         channels=new ArrayList<History>();
-
-        historiquePrgrams = new ArrayList<Program>();
-
+        historiqueChaines=new ArrayList<historiqueChaine>();
+        chaine=new Chaine();
         pieChart=(PieChart) rootView.findViewById(R.id.pieChart);
         barChart=(BarChart) rootView.findViewById(R.id.barChart);
         requestQueue = Volley.newRequestQueue(getActivity());
-
         pieChart.setRotationEnabled(true);
         pieChart.setHoleRadius(25f);
         pieChart.setTransparentCircleAlpha(0);
-        pieChart.setCenterText("Stats Par nb telespectateurs");
+        pieChart.setCenterText("Stats Par nb minutes");
         pieChart.setCenterTextSize(10);
         pieChart.setDrawEntryLabels(true);
         barChart.getDescription().setEnabled(false);
@@ -114,28 +118,40 @@ public class FragProgMin extends android.support.v4.app.Fragment {
         queue = Volley.newRequestQueue(getActivity().getApplicationContext());
         gsonBuilder = new GsonBuilder();
         gson = gsonBuilder.create();
-        //fetchLocations();
+        fetchLocations();
+//        try {
+//            CallSocket();
+//        } catch (URISyntaxException e) {
+//            e.printStackTrace();
+//        }
+        // Log.d("liste history",channels.toString());
+        barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                String chaine="";
+                int pos1=e.toString().indexOf("(sum): ");
+                int index = Math.round(h.getX());
+                System.out.println("chaaaine"+index);
+                chaine = historiqueChaines.get(index).getNom_chaine();
+                System.out.println("Chaneeel name"+chaine);
+                Toast.makeText(getContext(),"Channel : "+chaine,Toast.LENGTH_SHORT).show();
+            }
 
-        /*try {
-            CallSocket();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }*/
+            @Override
+            public void onNothingSelected() {
 
+            }
+        });
         pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
                 String chaine="";
                 int pos1=e.toString().indexOf("(sum): ");
-
-                /*for (int i=0;i<channels.size();i++){
-                   chaine =channels.get(i).getChannel();
-                    Toast.makeText(getContext(),"Chaine: "+chaine+"\n"+"program : "+channels.get(i).getProgram()+"",Toast.LENGTH_SHORT).show();
-
-
-                }*/
-                // Toast.makeText(getContext(),"Chaine: "+chaine+"\n"+"program : "+e.getData().toString()+"",Toast.LENGTH_SHORT).show();
-
+                int index = Math.round(h.getX());
+                System.out.println("chaaaine"+index);
+                chaine = historiqueChaines.get(index).getNom_chaine();
+                System.out.println("Chaneeel name"+chaine);
+                Toast.makeText(getContext(),"Channel : "+chaine,Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -155,9 +171,9 @@ public class FragProgMin extends android.support.v4.app.Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    JSONObject data = (JSONObject) args[0];
-                    Log.d("socket reslt","sockeeeeeeet");
-                    //Log.d("socket reslt",data.toString());
+                    JSONArray data = (JSONArray) args[0];
+                    Log.d("socket reslt", data.toString());
+                    fillthechar(data.toString());
                 }
             });
         }
@@ -167,18 +183,20 @@ public class FragProgMin extends android.support.v4.app.Fragment {
 
 
 
+
+
     private void setBarChartData(int count) {
         float barWidth=0.9f;
 
         ArrayList<BarEntry> yVals=new ArrayList<>();
-        for(int i=0;i<historiquePrgrams.size();i++){
+        for(int i=0;i<historiqueChaines.size();i++){
 
-            int value = (int) (historiquePrgrams.get(i).getNb_minute());
-            yVals.add(new BarEntry(i, (int) value));
+            Long value =  (historiqueChaines.get(i).getNb_minute());
+            yVals.add(new BarEntry(i,  value));
 
 
         }
-        BarDataSet set = new BarDataSet(yVals,"teles chaines");
+        BarDataSet set = new BarDataSet(yVals,"minutes chaines");
         set.setColors(ColorTemplate.MATERIAL_COLORS);
         set.setDrawValues(true);
         BarData data=new BarData(set);
@@ -193,15 +211,15 @@ public class FragProgMin extends android.support.v4.app.Fragment {
     private void addDataPie() {
         ArrayList<PieEntry> yEntrys=new ArrayList<>();
         ArrayList<String > xEntrys=new ArrayList<>();
-        for (int i=0 ;i<historiquePrgrams.size();i++){
-            yEntrys.add(new PieEntry(historiquePrgrams.get(i).getNb_minute()));
+        for (int i=0 ;i<historiqueChaines.size();i++){
+            yEntrys.add(new PieEntry(historiqueChaines.get(i).getNb_minute()));
 
         }
-        for (int i=0 ;i<historiquePrgrams.size();i++){
-            xEntrys.add(historiquePrgrams.get(i).getNom_program());
+        for (int i=0 ;i<historiqueChaines.size();i++){
+            xEntrys.add(historiqueChaines.get(i).getNom_chaine());
         }
         //create the data set
-        PieDataSet pieDataSet=new PieDataSet(yEntrys,"Teles Chaines");
+        PieDataSet pieDataSet=new PieDataSet(yEntrys,"Minutes Chaines");
         pieDataSet.setSliceSpace(2);
         pieDataSet.setValueTextSize(12);
         //add Colors to dataSet
@@ -225,7 +243,6 @@ public class FragProgMin extends android.support.v4.app.Fragment {
         pieChart.invalidate();
 
     }
-
     private void fetchLocations() {
         sharedPref = getActivity().getSharedPreferences("myPref", Context.MODE_PRIVATE);
         editor = sharedPref.edit();
@@ -249,72 +266,12 @@ public class FragProgMin extends android.support.v4.app.Fragment {
     private final com.android.volley.Response.Listener<String> onPostsLoaded = new com.android.volley.Response.Listener<String>() {
         @Override
         public void onResponse(String response) {
-            //Log.d("static token",LoginActivity.token  );
-            // mMapView.onResume();
-            //Log.d("string result ",response);
+//            Log.d("static token",LoginActivity.token  );
+//            // mMapView.onResume();
+//            Log.d("string result ",response);
             Type listType = new TypeToken<List<History>>(){}.getType();
-            /*List<History> locations = new Gson().fromJson(response  , listType);
-
-            Log.d("list all ",locations.toString());
-*/
-            //int [] tab = new int[locations.size()];
-            JSONArray jsonArray = new JSONArray();
-            JSONObject objJson = new JSONObject();
-
-            try {
-                jsonArray = new JSONArray(response);
-                //Log.d("json aray",jsonArray.toString());
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-
-                    objJson = jsonArray.getJSONObject(i);
-
-                    // here you can get id,name,city...
-                    String id = objJson.getString("_id");
-                    String recepteur = objJson.getString("recepteur");
-                    String bouquet = objJson.getString("bouquet");
-                    String channel = objJson.getString("channel");
-                    String program = objJson.getString("program");
-                    String date = objJson.getString("date");
-//
-//                    try {
-//                        dateDebutChaine = sdf.parse(date);
-//                    } catch (ParseException e) {
-//                        e.printStackTrace();
-//                    }
-                    History h =new History(recepteur,bouquet,channel,program/*,dateDebutChaine*/);
-                    //Log.d("h",h.toString());
-                    channels.add(h);
-
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            Log.d("liste history",channels.toString());
-            List<String> ch = new ArrayList<>();
-            long nb_minute=0;
-            long nbMinuteTot=0;
-
-//            for (int i=0 ;i<channels.size();i++){
-//                for (int j=0 ;j<channels.size();j++){
-//                    if( (channels.get(i).getProgram().equals(channels.get(j).getProgram()))){
-//                        dateFinChaine = channels.get(j+1).getDate();
-//                        nb_minute=DifferenceBetweenDate(channels.get(j).getDate(),dateFinChaine);
-//                        nbMinuteTot = nbMinuteTot + nb_minute;
-//                    }
-//                }
-//                if(!ch.contains(channels.get(i).getProgram())){
-//                    ch.add(channels.get(i).getProgram());
-//
-//                    historiquePrgrams.add(new Program(channels.get(i).getProgram(),nbMinuteTot));
-//                }
-//                nbMinuteTot=0;
-//            }
-            Log.d("his",historiquePrgrams.toString());
-            //Log.d("ch",ch.toString());
-            addDataPie();
-            setBarChartData(channels.size());
+            fillthechar(response);
+            // int i = Integer.valueOf(response);
         }
     };
 
@@ -326,13 +283,171 @@ public class FragProgMin extends android.support.v4.app.Fragment {
 
 
     };
+
+    void fillthechar(String response){
+        JSONArray jsonArray = new JSONArray();
+        JSONObject objJson = new JSONObject();
+        Log.d("filling the charts",response);
+        channels.clear();
+        historiqueChaines.clear();
+        try {
+            jsonArray = new JSONArray(response);
+            //Log.d("json aray",jsonArray.toString());
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+
+                objJson = jsonArray.getJSONObject(i);
+
+                // here you can get id,name,city...
+                String id = objJson.getString("_id");
+                String recepteur = objJson.getString("recepteur");
+                String bouquet = objJson.getString("bouquet");
+                String channel = objJson.getString("channel");
+                String program = objJson.getString("program");
+                int duree = objJson.getInt("duree");
+                //Date date = objJson.get
+                JSONObject date = objJson.getJSONObject("date");
+                Date d = new Date(date.getLong("value"));
+                //System.out.println("Dateeee"+d+"ddddddd"+date);
+                DateTime dateTime = new DateTime(d);
+                //System.out.println("dateTime"+dateTime+" Month"+dateTime.getDayOfMonth());
+//                try {
+//                    dateDebutChaine = sdf.parse(d.toString());
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//                Log.d("date value",dateDebutChaine.toString());
+                History h =new History(recepteur,bouquet,channel,program,duree);
+                //  Log.d("date ta zebi",dateDebutChaine.toString());
+                if (checkIfMyRecep(recepteur))
+                    channels.add(h);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        // Log.d("liste history",channels.toString());
+        //Log.d("liste history",channels.toString());
+        List<String> ch = new ArrayList<>();
+        int totaleDuree=0;
+        long nbMinuteTot=0;
+        //System.out.println("Sizzzzee"+channels.size());
+        DateTime d = DateTime.now();
+        for (int i=0 ;i<channels.size();i++){
+            for (int j=0 ;j<channels.size();j++){
+                if ((channels.get(i).getProgram().equals(channels.get(j).getProgram()))){
+                    totaleDuree= totaleDuree + channels.get(j).getDuree();
+                    System.out.println("dureeee"+totaleDuree+"program "+channels.get(j).getProgram());
+                    nbMinuteTot = TimeUnit.SECONDS.toMinutes(totaleDuree);
+                    // int k = j+1;
+                    // dateFinChaine = channels.get(k).getDate();
+                    //nb_minute= DifferenceBetweenDate(channels.get(j).getDate(),dateFinChaine);
+                    //long diffMinutes= d.getMillis() - channels.get(j).getDate().getMillis();
+                    //long diffMinutes=dateFinChaine.getMillis() - channels.get(j).getDate().getMillis();
+                    //  nb_minute = TimeUnit.MILLISECONDS.toMinutes(diffMinutes);
+                    //  nbMinuteTot = nbMinuteTot + nb_minute;
+                    // System.out.println("NBM"+nbMinuteTot+"nbbb"+nb_minute);
+                }
+            }
+            if(!ch.contains(channels.get(i).getProgram())){
+                ch.add(channels.get(i).getProgram());
+                historiqueChaines.add(new historiqueChaine(channels.get(i).getProgram(),nbMinuteTot));
+            }
+            totaleDuree=0;
+        }
+        //Log.d("historique",historiqueChaines.toString());
+
+        addDataPie();
+        setBarChartData(channels.size());
+    }
+
+
+    private void fetchrecepteurs() {
+        queue = Volley.newRequestQueue(getActivity().getApplicationContext());
+
+        sharedPref = getActivity().getSharedPreferences("myPref", Context.MODE_PRIVATE);
+        editor = sharedPref.edit();
+        // Log.d("hhhhhhhhhhhhhh",sharedPref.getString("username",null));
+        StringRequest request = new StringRequest(com.android.volley.Request.Method.GET, cnx.getPath(":8080/api/receivers/"+sharedPref.getString("username",null)), onPostsLoaded2, onPostsError2)
+        {
+            @Override
+
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("x-access-token", sharedPref.getString("token",null));
+                headers.put("Content-Type", "application/json");
+
+                return headers;
+            }
+
+        };
+        queue.add(request);
+
+    }
+
+    private final com.android.volley.Response.Listener<String> onPostsLoaded2 = new com.android.volley.Response.Listener<String>() {
+        @Override
+        public void onResponse(String response) {
+
+            Type listType = new TypeToken<List<History>>() {}.getType();
+
+            JSONArray jsonArray = new JSONArray();
+            JSONObject objJson = new JSONObject();
+
+            try {
+                jsonArray = new JSONArray(response);
+                // Log.d("json aray", jsonArray.toString());
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+
+                    objJson = jsonArray.getJSONObject(i);
+
+                    // here you can get id,name,city...
+                    String id_rec = objJson.getString("id_rec");
+                    String client = objJson.getString("client");
+                    String fam_region = objJson.getString("fam_region");
+                    String fam_size = objJson.getString("fam_size");
+
+                    String fam_age = objJson.getString("fam_age");
+                    //Date date = objJson.get
+
+                    Recepteur h = new Recepteur(id_rec, client, fam_region, fam_size, fam_age);
+                    //Log.d("h", h.toString());
+                    recepteurs.add(h);
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            //Log.d("liste receiver",recepteurs.toString());
+
+        }
+    };
+
+    private final com.android.volley.Response.ErrorListener onPostsError2 = new com.android.volley.Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            Log.e("PostActivity", error.toString());
+        }
+
+
+    };
+
+    boolean checkIfMyRecep(String id){
+        for( Recepteur r : recepteurs) {
+            if (id.equals(r.getId_rec()))
+                return true;
+        }
+        return false;
+    }
+
+
     public long DifferenceBetweenDate(Date startDate, Date endDate) {
         //milliseconds
         long different = endDate.getTime() - startDate.getTime();
 
-//        System.out.println("startDate : " + startDate);
-//        System.out.println("endDate : "+ endDate);
-//        System.out.println("different : " + different);
+        //Log.d("startDate : " , startDate.toString());
+        //System.out.println("endDate : "+ endDate);
+        // Log.d("different : " , String.valueOf(different));
 
         long secondsInMilli = 1000;
         long minutesInMilli = secondsInMilli * 60;
@@ -350,8 +465,7 @@ public class FragProgMin extends android.support.v4.app.Fragment {
 
         long elapsedSeconds = different / secondsInMilli;
 
-        //System.out.printf(                "%d days, %d hours, %d minutes, %d seconds%n",                elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds);
+        // System.out.printf(                "%d days, %d hours, %d minutes, %d seconds%n",                elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds);
         return elapsedMinutes;
     }
-
 }

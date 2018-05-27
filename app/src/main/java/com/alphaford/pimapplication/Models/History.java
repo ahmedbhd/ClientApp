@@ -17,6 +17,14 @@ public class History {
     DateTime date;
     int Duree;
 
+    public int getDuree() {
+        return Duree;
+    }
+
+    public void setDuree(int duree) {
+        Duree = duree;
+    }
+
     public String getChannel() {
         return channel;
     }
