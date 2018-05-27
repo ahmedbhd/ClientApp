@@ -115,11 +115,9 @@ public class FragProgVues extends Fragment {
         fetchrecepteurs();
 
         fetchLocations();
-<<<<<<< Updated upstream
 
 
 
-=======
         /*try {
             CallSocket();
         } catch (URISyntaxException e) {
@@ -159,7 +157,6 @@ public class FragProgVues extends Fragment {
 
             }
         });
->>>>>>> Stashed changes
 
 
         return rootView;

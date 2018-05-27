@@ -29,7 +29,9 @@ import com.alphaford.pimapplication.R;
 
 import com.alphaford.pimapplication.WatcherActivity;
 import com.alphaford.pimapplication.YoutubeStatisticActivity;
-
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 
 import org.json.JSONObject;
 
@@ -37,30 +39,6 @@ import java.net.URISyntaxException;
 
 
 public class StatsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-<<<<<<< Updated upstream
-        /**
-         * The {@link android.support.v4.view.PagerAdapter} that will provide
-         * fragments for each of the sections. We use a
-         * {@link FragmentPagerAdapter} derivative, which will keep every
-         * loaded fragment in memory. If this becomes too memory intensive, it
-         * may be best to switch to a
-         * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-         */
-        private StatsActivity.SectionsPagerAdapter mSectionsPagerAdapter;
-
-        /**
-         * The {@link ViewPager} that will host the section contents.
-         */
-        private ViewPager mViewPager;
-        private DrawerLayout mDrawerLayout;
-        ImageButton refresh;
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_stats);
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
-=======
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -92,7 +70,6 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
->>>>>>> Stashed changes
 //            mSocket.connect();
 //            mSocket.on("output", onNewMessage);
 //            mSocket.on("eveneeeennt", onNewEvent);
@@ -196,12 +173,6 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
 
         }
 
-<<<<<<< Updated upstream
-
-        /**
-         * A placeholder fragment containing a simple view.
-         */
-=======
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -242,7 +213,6 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
     /**
      * A placeholder fragment containing a simple view.
      */
->>>>>>> Stashed changes
 
 
     /**
@@ -279,21 +249,6 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
             return 4;
         }
 
-<<<<<<< Updated upstream
-            @Override
-            public CharSequence getPageTitle(int position) {
-                switch (position) {
-                    case 0:
-                        return "Ch/Min";
-                    case 1:
-                        return "Ch/Views";
-                    case 2:
-                        return "Prog/Min";
-                    case 3 :
-                        return "Prog/Views";
-                }
-                return null;
-=======
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
@@ -305,7 +260,6 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
                     return "Prog/Min";
                 case 3 :
                     return "Prog/Vues";
->>>>>>> Stashed changes
             }
             return null;
         }

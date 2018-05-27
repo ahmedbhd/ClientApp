@@ -66,9 +66,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 
 /**
@@ -136,7 +133,7 @@ public class FragChannelVues extends android.support.v4.app.Fragment {
             e.printStackTrace();
         }*/
         Log.d("liste history",locations.toString());
-<<<<<<< Updated upstream
+//<<<<<<< Updated upstream
 
 //        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
 //            @Override
@@ -159,7 +156,7 @@ public class FragChannelVues extends android.support.v4.app.Fragment {
 //
 //            }
 //        });
-=======
+//=======
         barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
@@ -195,7 +192,7 @@ public class FragChannelVues extends android.support.v4.app.Fragment {
 
             }
         });
->>>>>>> Stashed changes
+//>>>>>>> Stashed changes
 
 
         return rootView;
