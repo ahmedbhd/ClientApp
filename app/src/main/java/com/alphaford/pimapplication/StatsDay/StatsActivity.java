@@ -137,7 +137,7 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
         }  else if (id == R.id.advanced_research) {
             Intent i = new Intent(StatsActivity.this, AdvancedResearchActivity.class);
             startActivity(i);
-            if (permissionClient.equals("2") || permissionClient.equals("3")) {
+            if (permissionClient.toLowerCase().equals("gold") || permissionClient.toLowerCase().equals("platinium")) {
             }else {
 
                 Toast.makeText(StatsActivity.this, "Permission denied", Toast.LENGTH_LONG).show();
@@ -145,7 +145,7 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
             }
 
         }  else if (id == R.id.youtube_statistic) {
-            if (!permissionClient.equals("3")) {
+            if (!permissionClient.toLowerCase().equals("platinium")) {
                 Toast.makeText(StatsActivity.this, "Permission denied", Toast.LENGTH_LONG).show();
             }else {
                 Intent i = new Intent(StatsActivity.this, YoutubeStatisticActivity.class);
@@ -153,7 +153,7 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
             }
 
         } else if (id == R.id.watcher) {
-            if (permissionClient.equals("2") || permissionClient.equals("3")) {
+            if (permissionClient.toLowerCase().equals("gold") || permissionClient.toLowerCase().equals("platinium")) {
                 Intent i = new Intent(StatsActivity.this, WatcherActivity.class);
                 startActivity(i);
             }else {

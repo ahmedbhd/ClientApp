@@ -187,7 +187,7 @@ public class WatcherActivity extends AppCompatActivity implements NavigationView
 
 
         }  else if (id == R.id.youtube_statistic) {
-            if (permission.equals("3")){
+            if (permission.toLowerCase().equals("platinium")){
                 Intent i=new Intent(WatcherActivity.this, YoutubeStatisticActivity.class);
                 startActivity(i);
             }else {

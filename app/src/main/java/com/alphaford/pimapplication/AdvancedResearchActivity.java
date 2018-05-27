@@ -73,6 +73,7 @@ public class AdvancedResearchActivity extends AppCompatActivity implements Navig
     PieChart pieChart;
     BarChart barChart;
     Button search;
+    String permission;
     LinearLayout layoutAge,layoutRegion,layoutNombre;
     RadioGroup radioGroup;
     RadioButton radioButton;
@@ -104,6 +105,9 @@ public class AdvancedResearchActivity extends AppCompatActivity implements Navig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advanced_research);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
+        sharedPref = getSharedPreferences("myPref", Context.MODE_PRIVATE);
+        editor = sharedPref.edit();
+        permission = sharedPref.getString("permission",null);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -173,8 +177,12 @@ public class AdvancedResearchActivity extends AppCompatActivity implements Navig
 
 
         }  else if (id == R.id.youtube_statistic) {
-            Intent i=new Intent(AdvancedResearchActivity.this, YoutubeStatisticActivity.class);
-            startActivity(i);
+            if (permission.toLowerCase().equals("platinium")){
+                Intent i=new Intent(AdvancedResearchActivity.this, YoutubeStatisticActivity.class);
+                startActivity(i);
+            }else {
+                Toast.makeText(AdvancedResearchActivity.this, "Permission denied", Toast.LENGTH_LONG).show();
+            }
 
         } else if (id == R.id.watcher) {
             Intent i=new Intent(AdvancedResearchActivity.this, WatcherActivity.class);
