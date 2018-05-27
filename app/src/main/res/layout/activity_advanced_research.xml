@@ -24,6 +24,7 @@
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#B80E25"
             >
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -32,7 +33,7 @@
                     android:layout_width="65dp"
                     android:layout_height="50dp"
                     android:scaleType="fitXY"
-                    android:background="@color/colorPrimary"
+                    android:background="#B80E25"
                     android:src="@drawable/mylogoredi"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -62,7 +63,7 @@
                 android:textSize="25dp"
                 android:textStyle="bold"
                 android:textAlignment="center"
-                android:textColor="@color/primary"
+                android:textColor="#0015AF"
                 android:layout_gravity="center"/>
 
 

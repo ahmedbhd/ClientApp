@@ -24,6 +24,7 @@
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#B80E25"
             >
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -32,7 +33,7 @@
                     android:layout_width="65dp"
                     android:layout_height="50dp"
                     android:scaleType="fitXY"
-                    android:background="@color/colorPrimary"
+                    android:background="#B80E25"
                     android:src="@drawable/mylogoredi"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -52,7 +53,7 @@
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#A9E2F3"
+                android:background="#C08484"
                 />
         </android.support.design.widget.AppBarLayout>
     <LinearLayout

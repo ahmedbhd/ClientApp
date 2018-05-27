@@ -316,7 +316,7 @@ public class AdvancedResearchActivity extends AppCompatActivity implements Navig
 
 
             search.setOnClickListener(v -> {
-                fetchLocations("region");
+                    fetchLocations("region");
             });
         }
         if (radioButton.getText().equals("Family Membres"))

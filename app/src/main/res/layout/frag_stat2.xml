@@ -19,6 +19,29 @@
             android:layout_marginTop="20dp"
             android:background="@android:color/white"
             android:orientation="vertical">
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:id="@+id/radioGroupe"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/channelMin"
+                    android:text="/Min"
+                    android:checked="true"
+                    />
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/channelHour"
+                    android:text="/Hours"
+                  />
+
+            </RadioGroup>
 
             <TextView
                 android:layout_width="wrap_content"

@@ -17,7 +17,7 @@
         android:layout_width="290dp"
         android:layout_height="110dp"
         android:layout_marginTop="17dp"
-        android:background="#FF5631"
+        android:background="#C00D25"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:src="@drawable/audi" />
 

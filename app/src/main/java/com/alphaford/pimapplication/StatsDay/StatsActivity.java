@@ -71,6 +71,7 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
         sharedPreferences = getSharedPreferences("myPref", Context.MODE_PRIVATE);
         ed = sharedPreferences.edit();
         permissionClient = sharedPreferences.getString("permission",null);
+        Log.d("permission",permissionClient);
 
 
 
@@ -247,13 +248,13 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Channel/Min";
+                    return "Channel/Time";
                 case 1:
-                    return "Channel/Vues";
+                    return "Channel/Views";
                 case 2:
-                    return "Prog/Min";
+                    return "Prog/Time";
                 case 3 :
-                    return "Prog/Vues";
+                    return "Prog/Views";
             }
             return null;
         }

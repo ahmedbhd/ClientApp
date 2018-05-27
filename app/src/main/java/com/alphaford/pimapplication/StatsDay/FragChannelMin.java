@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.alphaford.pimapplication.ConnexionManager;
@@ -77,7 +79,7 @@ public class FragChannelMin extends android.support.v4.app.Fragment {
     SharedPreferences.Editor editor ;
     PieChart pieChart;
     BarChart barChart;
-
+    RadioGroup radioGroup;
     ArrayList<Recepteur> recepteurs = new ArrayList<>();
     @SuppressLint("SimpleDateFormat")
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
@@ -112,6 +114,7 @@ public class FragChannelMin extends android.support.v4.app.Fragment {
         chaine=new Chaine();
         pieChart=(PieChart) rootView.findViewById(R.id.pieChart);
         barChart=(BarChart) rootView.findViewById(R.id.barChart);
+        radioGroup = (RadioGroup) rootView.findViewById(R.id.radioGroupe);
         requestQueue = Volley.newRequestQueue(getActivity());
         pieChart.setRotationEnabled(true);
         pieChart.setHoleRadius(25f);
@@ -126,7 +129,21 @@ public class FragChannelMin extends android.support.v4.app.Fragment {
         queue = Volley.newRequestQueue(getActivity().getApplicationContext());
         gsonBuilder = new GsonBuilder();
         gson = gsonBuilder.create();
-        fetchLocations();
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch(checkedId) {
+                    case R.id.channelMin:
+                        fetchLocations("minutes");
+                        break;
+                    case R.id.channelHour:
+                        fetchLocations("hours");
+                        break;
+                }
+
+            }
+        });
+        fetchLocations("minutes");
 //        try {
 //            CallSocket();
 //        } catch (URISyntaxException e) {
@@ -204,7 +221,7 @@ public class FragChannelMin extends android.support.v4.app.Fragment {
 
 
         }
-        BarDataSet set = new BarDataSet(yVals,"minutes chaines");
+        BarDataSet set = new BarDataSet(yVals,"Minutes Chaines");
         set.setColors(ColorTemplate.MATERIAL_COLORS);
         set.setDrawValues(true);
         BarData data=new BarData(set);
@@ -251,10 +268,12 @@ public class FragChannelMin extends android.support.v4.app.Fragment {
         pieChart.invalidate();
 
     }
-    private void fetchLocations() {
+    private void fetchLocations(String type) {
         sharedPref = getActivity().getSharedPreferences("myPref", Context.MODE_PRIVATE);
         editor = sharedPref.edit();
-        StringRequest request = new StringRequest(com.android.volley.Request.Method.GET, HttpUrl, onPostsLoaded, onPostsError)
+        StringRequest request = null;
+        if (type.equals("minutes")){
+         request = new StringRequest(com.android.volley.Request.Method.GET, HttpUrl, onPostsLoaded, onPostsError)
         {
             @Override
 
@@ -267,6 +286,22 @@ public class FragChannelMin extends android.support.v4.app.Fragment {
             }
 
         };
+        }else if (type.equals("hours")){
+            request = new StringRequest(com.android.volley.Request.Method.GET, HttpUrl, onPostsLoadedHours, onPostsError)
+            {
+                @Override
+
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<>();
+                    headers.put("x-access-token", sharedPref.getString("token",null));
+                    headers.put("Content-Type", "application/json");
+
+                    return headers;
+                }
+
+            };
+        }
+
         queue.add(request);
 
     }
@@ -274,11 +309,16 @@ public class FragChannelMin extends android.support.v4.app.Fragment {
     private final com.android.volley.Response.Listener<String> onPostsLoaded = new com.android.volley.Response.Listener<String>() {
         @Override
         public void onResponse(String response) {
-//            Log.d("static token",LoginActivity.token  );
-//            // mMapView.onResume();
-//            Log.d("string result ",response);
             Type listType = new TypeToken<List<History>>(){}.getType();
             fillthechar(response);
+        }
+    };
+    private final com.android.volley.Response.Listener<String> onPostsLoadedHours = new com.android.volley.Response.Listener<String>() {
+        @Override
+        public void onResponse(String response) {
+
+            Type listType = new TypeToken<List<History>>(){}.getType();
+            fillthecharhours(response);
             // int i = Integer.valueOf(response);
         }
     };
@@ -354,6 +394,81 @@ public class FragChannelMin extends android.support.v4.app.Fragment {
                   //  nb_minute = TimeUnit.MILLISECONDS.toMinutes(diffMinutes);
                   //  nbMinuteTot = nbMinuteTot + nb_minute;
                    // System.out.println("NBM"+nbMinuteTot+"nbbb"+nb_minute);
+                }
+            }
+            if(!ch.contains(channels.get(i).getChannel())){
+                ch.add(channels.get(i).getChannel());
+                historiqueChaines.add(new historiqueChaine(channels.get(i).getChannel(),nbMinuteTot));
+            }
+            totaleDuree=0;
+        }
+        //Log.d("historique",historiqueChaines.toString());
+
+        addDataPie();
+        setBarChartData(channels.size());
+    }
+    void fillthecharhours(String response){
+        JSONArray jsonArray = new JSONArray();
+        JSONObject objJson = new JSONObject();
+        Log.d("filling the charts",response);
+        channels.clear();
+        historiqueChaines.clear();
+        try {
+            jsonArray = new JSONArray(response);
+            //Log.d("json aray",jsonArray.toString());
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+
+                objJson = jsonArray.getJSONObject(i);
+
+                // here you can get id,name,city...
+                String id = objJson.getString("_id");
+                String recepteur = objJson.getString("recepteur");
+                String bouquet = objJson.getString("bouquet");
+                String channel = objJson.getString("channel");
+                String program = objJson.getString("program");
+                int duree = objJson.getInt("duree");
+                //Date date = objJson.get
+                JSONObject date = objJson.getJSONObject("date");
+                Date d = new Date(date.getLong("value"));
+                //System.out.println("Dateeee"+d+"ddddddd"+date);
+                DateTime dateTime = new DateTime(d);
+                //System.out.println("dateTime"+dateTime+" Month"+dateTime.getDayOfMonth());
+//                try {
+//                    dateDebutChaine = sdf.parse(d.toString());
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//                Log.d("date value",dateDebutChaine.toString());
+                History h =new History(recepteur,bouquet,channel,program,duree);
+                //  Log.d("date ta zebi",dateDebutChaine.toString());
+                if (checkIfMyRecep(recepteur))
+                    channels.add(h);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        // Log.d("liste history",channels.toString());
+        //Log.d("liste history",channels.toString());
+        List<String> ch = new ArrayList<>();
+        int totaleDuree=0;
+        long nbMinuteTot=0;
+        //System.out.println("Sizzzzee"+channels.size());
+        DateTime d = DateTime.now();
+        for (int i=0 ;i<channels.size();i++){
+            for (int j=0 ;j<channels.size();j++){
+                if ((channels.get(i).getChannel().equals(channels.get(j).getChannel()))){
+                    totaleDuree= totaleDuree + channels.get(j).getDuree();
+                    System.out.println("dureeee"+totaleDuree+"channeel "+channels.get(j).getChannel());
+                    nbMinuteTot = TimeUnit.SECONDS.toHours(totaleDuree);
+                    // int k = j+1;
+                    // dateFinChaine = channels.get(k).getDate();
+                    //nb_minute= DifferenceBetweenDate(channels.get(j).getDate(),dateFinChaine);
+                    //long diffMinutes= d.getMillis() - channels.get(j).getDate().getMillis();
+                    //long diffMinutes=dateFinChaine.getMillis() - channels.get(j).getDate().getMillis();
+                    //  nb_minute = TimeUnit.MILLISECONDS.toMinutes(diffMinutes);
+                    //  nbMinuteTot = nbMinuteTot + nb_minute;
+                    // System.out.println("NBM"+nbMinuteTot+"nbbb"+nb_minute);
                 }
             }
             if(!ch.contains(channels.get(i).getChannel())){
@@ -476,4 +591,6 @@ public class FragChannelMin extends android.support.v4.app.Fragment {
         // System.out.printf(                "%d days, %d hours, %d minutes, %d seconds%n",                elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds);
         return elapsedMinutes;
     }
+
+
 }
