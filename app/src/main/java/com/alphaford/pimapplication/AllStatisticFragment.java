@@ -158,12 +158,15 @@ public class AllStatisticFragment extends Fragment {
                 }
             }
         }else {
-            int j=0;
+            //int j=0;
+            Log.d("listdbviewsch" , listdbviewsch.toString());
+            Log.d("historiqueChaines",historiqueChaines.toString());
             for (int i = 0;i<listdbviewsch.size(); i++){
-                if(historiqueChaines.get(j).getNom_chaine().equals(listdbviewsch.get(i).getNom_chaine())){
-                    historiqueChaine p = listdbviewsch.get(i);
-                    viewsdb.add(new historiqueChaine(p.getNom_chaine(), p.getNbr_teles()));
-                    j++;
+                for (int j =0 ; j<historiqueChaines.size();j++) {
+                    if (historiqueChaines.get(j).getNom_chaine().equals(listdbviewsch.get(i).getNom_chaine())) {
+                        historiqueChaine p = listdbviewsch.get(i);
+                        viewsdb.add(new historiqueChaine(p.getNom_chaine(), p.getNbr_teles()));
+                    }
                 }
             }
         }

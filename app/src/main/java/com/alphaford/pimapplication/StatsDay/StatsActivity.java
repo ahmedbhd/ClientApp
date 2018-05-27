@@ -58,7 +58,7 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
     ImageButton refresh;
     public SharedPreferences sharedPreferences;
     SharedPreferences.Editor ed ;
-   
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
