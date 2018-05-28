@@ -149,17 +149,18 @@ public class AllStatisticFragment extends Fragment {
     private void addLinerData(int count , int type){
         ArrayList<historiqueChaine> viewsdb = new ArrayList<>();
         if (type == 0){
-            int j=0;
             for (int i = 0;i<listdbviewsprog.size(); i++){
-                if(historiqueChaines.get(j).getNom_chaine().equals(listdbviewsprog.get(i).getNom_program())){
-                    Program p = listdbviewsprog.get(i);
-                    viewsdb.add(new historiqueChaine(p.getNom_program(), p.getNb_telesp()));
-                    j++;
+                for (int j =0 ; j<historiqueChaines .size(); j++) {
+                    if (historiqueChaines.get(j).getNom_chaine().equals(listdbviewsprog.get(i).getNom_program())) {
+                        Program p = listdbviewsprog.get(i);
+                        viewsdb.add(new historiqueChaine(p.getNom_program(), p.getNb_telesp()));
+                        Log.d("heher","hrerererer");
+                    }
                 }
             }
         }else {
             //int j=0;
-            Log.d("listdbviewsch" , listdbviewsch.toString());
+            Log.d("listdbviewsprog" , listdbviewsprog.toString());
             Log.d("historiqueChaines",historiqueChaines.toString());
             for (int i = 0;i<listdbviewsch.size(); i++){
                 for (int j =0 ; j<historiqueChaines.size();j++) {
@@ -177,50 +178,53 @@ public class AllStatisticFragment extends Fragment {
         Log.d(" viewdb",viewsdb.toString());
         Log.d("historique in line",historiqueChaines.toString());
 
-        ArrayList<Entry> yValue1 = new ArrayList<>();
+        if (viewsdb.isEmpty()){
+            Toast.makeText(getContext(),"No Charts from Youtube",Toast.LENGTH_LONG).show();
+        }else {
+            ArrayList<Entry> yValue1 = new ArrayList<>();
 
-        if (count>10) {
-            for (int i = 0; i < 10; i++) {
-                Long val = historiqueChaines.get(i).getNb_minute();
-                yValue1.add(new Entry(i, val));
+            if (count > 10) {
+                for (int i = 0; i < 10; i++) {
+                    Long val = historiqueChaines.get(i).getNb_minute();
+                    yValue1.add(new Entry(i, val));
+                }
+            } else {
+                for (int i = 0; i < count; i++) {
+                    Long val = historiqueChaines.get(i).getNb_minute();
+                    yValue1.add(new Entry(i, val));
+                }
             }
-        }else{
-            for (int i = 0; i < count; i++) {
-                Long val = historiqueChaines.get(i).getNb_minute();
-                yValue1.add(new Entry(i, val));
+
+            ArrayList<Entry> yValue2 = new ArrayList<>();
+
+            if (count > 10) {
+                for (int i = 0; i < 10; i++) {
+                    int val = viewsdb.get(i).getNbr_teles() * 10000000;
+                    yValue2.add(new Entry(i, val));
+                }
+            } else {
+                for (int i = 0; i < viewsdb.size(); i++) {
+                    int val = viewsdb.get(i).getNbr_teles() * 10000000;
+                    yValue2.add(new Entry(i, val));
+                }
             }
+
+
+            LineDataSet set1, set2;
+            set1 = new LineDataSet(yValue1, "Youtube views");
+            set2 = new LineDataSet(yValue2, "tv views");
+
+            set1.setColor(Color.RED);
+            set1.setLineWidth(2f);
+
+            set2.setColor(Color.BLUE);
+            set2.setLineWidth(2f);
+            LineData data = new LineData(set1, set2);
+
+            lineChart.setData(data);
+            lineChart.invalidate();
+            lineChart.animateX(500);
         }
-
-        ArrayList<Entry> yValue2 = new ArrayList<>();
-
-        if (count>10) {
-            for (int i = 0; i < 10; i++) {
-                int val = viewsdb.get(i).getNbr_teles()*10000000;
-                yValue2.add(new Entry(i, val));
-            }
-        }else{
-            for (int i = 0; i < count; i++) {
-                int val = viewsdb.get(i).getNbr_teles()*10000000;
-                yValue2.add(new Entry(i, val));
-            }
-        }
-
-
-
-        LineDataSet set1,set2;
-        set1 = new LineDataSet(yValue1,"Youtube views");
-        set2 = new LineDataSet(yValue2 , "tv views");
-
-        set1.setColor(Color.RED);
-        set1.setLineWidth(2f);
-
-        set2.setColor(Color.BLUE);
-        set2.setLineWidth(2f);
-        LineData data = new LineData(set1,set2);
-
-        lineChart.setData(data);
-        lineChart.invalidate();
-        lineChart.animateX(500);
 
     }
 
@@ -520,17 +524,19 @@ public class AllStatisticFragment extends Fragment {
 
             }
             if (historiqueChaines.size()>0){
-                int j =0;
+
                 for (int i =0;i< programsfiltered.size();i++) {
-                    if (programsfiltered.get(i).getChannel().equals(historiqueChaines.get(j).getNom_chaine())){
-                        programsfilteredyou.add(programsfiltered.get(i));
-                        j++;
+                    for (int j =0 ; j <historiqueChaines.size();j++) {
+                        if (programsfiltered.get(i).getChannel().equals(historiqueChaines.get(j).getNom_chaine())) {
+                            programsfilteredyou.add(programsfiltered.get(i));
+
+                        }
                     }
                 }
 
             }
             int count=0;
-
+            ch.clear();
             for(int i=0 ; i<channels.size();i++){
                 for (int j = 0 ; j<channels.size();j++){
                     if ((channels.get(i).getProgram().equals(channels.get(j).getProgram()))){
@@ -658,7 +664,7 @@ public class AllStatisticFragment extends Fragment {
 //                j++;
 //            }
 //        }
-        if (historiqueChaines.size()==0)
+        if (historiqueChaines.isEmpty())
             Toast.makeText(getActivity(), "No charts to display", Toast.LENGTH_LONG).show();
         else {
 
@@ -765,7 +771,7 @@ public class AllStatisticFragment extends Fragment {
 //                j++;
 //            }
 //        }
-        if (historiqueChaines.size()==0)
+        if (historiqueChaines.isEmpty())
             Toast.makeText(getActivity(), "No charts to display", Toast.LENGTH_LONG).show();
         else {
 
