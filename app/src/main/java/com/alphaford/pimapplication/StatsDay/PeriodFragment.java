@@ -415,6 +415,8 @@ public class PeriodFragment extends Fragment {
 
                 History h =new History(recepteur,bouquet,channel,program,duree);
                 try {
+                    if (StartDate.equals("Start Date")||EndDate.equals("End Date"))
+                        break;
                     StartDate = format.parse(Startdate);
                     Enddate = format.parse(EndDate);
                     DateTime s= new DateTime(StartDate);
