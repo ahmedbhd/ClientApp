@@ -158,13 +158,8 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
             }
         }
         else if (id == R.id.disconnect) {
-                 /* Intent  i = new Intent(HomeActivity.this, LoginActivity.class);
-                sharedPref = this.getSharedPreferences( "myPref", MODE_PRIVATE);
-                editor = sharedPref.edit();
-                editor.clear();
-                editor.putInt("logIn", 0);
-                editor.commit();
-                startActivity(i);*/
+                  Intent  i = new Intent(StatsActivity.this, LoginActivity.class);
+                startActivity(i);
 
         }
 
@@ -232,6 +227,8 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
                     return f3;
                 case 3 : FragProgVues f4 =new FragProgVues();
                     return f4;
+                case 4 : PeriodFragment f5 =new PeriodFragment();
+                    return f5;
 
                 default: return null;
 
@@ -241,20 +238,22 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 4;
+            return 5;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Channel/Time";
+                    return "Ch/Time";
                 case 1:
-                    return "Channel/Views";
+                    return "Ch/Views";
                 case 2:
                     return "Prog/Time";
                 case 3 :
                     return "Prog/Views";
+                case 4 :
+                    return "/Period";
             }
             return null;
         }

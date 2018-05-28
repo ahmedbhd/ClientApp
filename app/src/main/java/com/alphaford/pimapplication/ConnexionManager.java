@@ -1,7 +1,7 @@
 package com.alphaford.pimapplication;
 
 public class    ConnexionManager {
-    String adress="http://196.224.13.135";
+    String adress="http://192.168.1.107";
     String port;
 
     public ConnexionManager(String prot) {

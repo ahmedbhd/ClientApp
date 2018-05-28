@@ -190,13 +190,8 @@ public class AdvancedResearchActivity extends AppCompatActivity implements Navig
 
         }
         else if (id == R.id.disconnect) {
-                 /* Intent  i = new Intent(HomeActivity.this, LoginActivity.class);
-                sharedPref = this.getSharedPreferences( "myPref", MODE_PRIVATE);
-                editor = sharedPref.edit();
-                editor.clear();
-                editor.putInt("logIn", 0);
-                editor.commit();
-                startActivity(i);*/
+                 Intent  i = new Intent(AdvancedResearchActivity.this, LoginActivity.class);
+                startActivity(i);
 
         }
 

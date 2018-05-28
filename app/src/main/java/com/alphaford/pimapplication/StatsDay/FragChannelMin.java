@@ -266,6 +266,7 @@ public class FragChannelMin extends android.support.v4.app.Fragment {
         PieData pieData=new PieData(pieDataSet);
         pieChart.setData(pieData);
         pieChart.invalidate();
+        pieChart.animateY(500);
 
     }
     private void fetchLocations(String type) {

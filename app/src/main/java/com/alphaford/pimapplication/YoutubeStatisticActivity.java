@@ -130,13 +130,8 @@ public class YoutubeStatisticActivity extends AppCompatActivity  implements Navi
 
         }
         else if (id == R.id.disconnect) {
-                 /* Intent  i = new Intent(HomeActivity.this, LoginActivity.class);
-                sharedPref = this.getSharedPreferences( "myPref", MODE_PRIVATE);
-                editor = sharedPref.edit();
-                editor.clear();
-                editor.putInt("logIn", 0);
-                editor.commit();
-                startActivity(i);*/
+                  Intent  i = new Intent(YoutubeStatisticActivity.this, LoginActivity.class);
+                startActivity(i);
 
         }
 

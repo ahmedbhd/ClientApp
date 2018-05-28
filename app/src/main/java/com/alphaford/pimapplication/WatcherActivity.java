@@ -101,6 +101,7 @@ public class WatcherActivity extends AppCompatActivity implements NavigationView
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1,chaines);
         channelList.setAdapter(adapter);
 
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -199,13 +200,8 @@ public class WatcherActivity extends AppCompatActivity implements NavigationView
 
         }
         else if (id == R.id.disconnect) {
-                 /* Intent  i = new Intent(HomeActivity.this, LoginActivity.class);
-                sharedPref = this.getSharedPreferences( "myPref", MODE_PRIVATE);
-                editor = sharedPref.edit();
-                editor.clear();
-                editor.putInt("logIn", 0);
-                editor.commit();
-                startActivity(i);*/
+                  Intent  i = new Intent(WatcherActivity.this, LoginActivity.class);
+                startActivity(i);
 
         }
 
@@ -242,10 +238,10 @@ public class WatcherActivity extends AppCompatActivity implements NavigationView
         public void onResponse(String response) {
 
             Type listType = new TypeToken<List<History>>() {}.getType();
-
+            chaines.clear();
             JSONArray jsonArray = new JSONArray();
             JSONObject objJson = new JSONObject();
-
+            List<String> ch = new ArrayList<>();
             try {
                 jsonArray = new JSONArray(response);
                 // Log.d("json aray", jsonArray.toString());
@@ -262,15 +258,20 @@ public class WatcherActivity extends AppCompatActivity implements NavigationView
                     String program = objJson.getString("program");
                     //Date date = objJson.get
                     History h =new History(recepteur,bouquet,channel,program);
-                    Log.d("haaaa", h.toString());
-                    chaines.add(h.getChannel());
-                    Log.d("chaineListe", chaines.get(0));
+                    //Log.d("haaaa", h.toString());
+                    ch.add(h.getChannel());
+                    //Log.d("chaineListe", chaines.get(0));
 
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
+            for (String s : ch){
+                if (!chaines.contains(s)){
+                    chaines.add(s);
+                }
+            }
+            Log.d("chaineListe", chaines.toString());
         }
     };
     private final com.android.volley.Response.ErrorListener onPostsError2 = new com.android.volley.Response.ErrorListener() {
