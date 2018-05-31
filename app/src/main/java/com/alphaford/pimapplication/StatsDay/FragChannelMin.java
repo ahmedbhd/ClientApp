@@ -59,6 +59,7 @@ import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -214,13 +215,24 @@ public class FragChannelMin extends android.support.v4.app.Fragment {
         float barWidth=0.9f;
 
         ArrayList<BarEntry> yVals=new ArrayList<>();
-        for(int i=0;i<historiqueChaines.size();i++){
+            Collections.sort(historiqueChaines, (o1, o2) -> o2.getNbr_teles()-o1.getNbr_teles());
+            if (historiqueChaines.size()>10) {
+                for (int i = 0; i < 10; i++) {
 
-            Long value =  (historiqueChaines.get(i).getNb_minute());
-            yVals.add(new BarEntry(i,  value));
+                    Long value = (historiqueChaines.get(i).getNb_minute());
+                    yVals.add(new BarEntry(i, value));
 
 
-        }
+                }
+            }else {
+                for (int i = 0; i < historiqueChaines.size(); i++) {
+
+                    Long value = (historiqueChaines.get(i).getNb_minute());
+                    yVals.add(new BarEntry(i, value));
+
+
+                }
+            }
         BarDataSet set = new BarDataSet(yVals,"Minutes Chaines");
         set.setColors(ColorTemplate.MATERIAL_COLORS);
         set.setDrawValues(true);
@@ -236,12 +248,23 @@ public class FragChannelMin extends android.support.v4.app.Fragment {
     private void addDataPie() {
         ArrayList<PieEntry> yEntrys=new ArrayList<>();
         ArrayList<String > xEntrys=new ArrayList<>();
-        for (int i=0 ;i<historiqueChaines.size();i++){
-            yEntrys.add(new PieEntry(historiqueChaines.get(i).getNb_minute()));
+        Collections.sort(historiqueChaines, (o1, o2) -> o2.getNbr_teles()-o1.getNbr_teles());
+        if (historiqueChaines.size()>10) {
+            for (int i = 0; i < 10; i++) {
+                yEntrys.add(new PieEntry(historiqueChaines.get(i).getNb_minute()));
 
-        }
-        for (int i=0 ;i<historiqueChaines.size();i++){
-            xEntrys.add(historiqueChaines.get(i).getNom_chaine());
+            }
+            for (int i = 0; i < 10; i++) {
+                xEntrys.add(historiqueChaines.get(i).getNom_chaine());
+            }
+        }else{
+            for (int i = 0; i < historiqueChaines.size(); i++) {
+                yEntrys.add(new PieEntry(historiqueChaines.get(i).getNb_minute()));
+
+            }
+            for (int i = 0; i < historiqueChaines.size(); i++) {
+                xEntrys.add(historiqueChaines.get(i).getNom_chaine());
+            }
         }
         //create the data set
         PieDataSet pieDataSet=new PieDataSet(yEntrys,"Minutes Chaines");

@@ -130,9 +130,10 @@ public class StatsActivity extends AppCompatActivity implements NavigationView.O
         if (id == R.id.general_statistic) {
 
         }  else if (id == R.id.advanced_research) {
-            Intent i = new Intent(StatsActivity.this, AdvancedResearchActivity.class);
-            startActivity(i);
+
             if (permissionClient.toLowerCase().equals("gold") || permissionClient.toLowerCase().equals("platinium")) {
+                Intent i = new Intent(StatsActivity.this, AdvancedResearchActivity.class);
+                startActivity(i);
             }else {
 
                 Toast.makeText(StatsActivity.this, "Permission denied", Toast.LENGTH_LONG).show();

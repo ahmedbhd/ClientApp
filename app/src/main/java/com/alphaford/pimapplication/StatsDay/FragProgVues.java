@@ -53,6 +53,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -187,12 +188,23 @@ public class FragProgVues extends Fragment {
         float barWidth=0.9f;
 
         ArrayList<BarEntry> yVals=new ArrayList<>();
-        for(int i=0;i<historiquePrgrams.size();i++){
+        Collections.sort(historiquePrgrams, (o1, o2) -> o2.getNb_telesp()-o1.getNb_telesp());
+        if (historiquePrgrams.size()>10) {
+            for (int i = 0; i < 10; i++) {
 
-            int value = (int) (historiquePrgrams.get(i).getNb_telesp());
-            yVals.add(new BarEntry(i, (int) value));
+                int value = (int) (historiquePrgrams.get(i).getNb_telesp());
+                yVals.add(new BarEntry(i, (int) value));
 
 
+            }
+        }else {
+            for (int i = 0; i < historiquePrgrams.size(); i++) {
+
+                int value = (int) (historiquePrgrams.get(i).getNb_telesp());
+                yVals.add(new BarEntry(i, (int) value));
+
+
+            }
         }
         BarDataSet set = new BarDataSet(yVals,"Program Views");
         set.setColors(ColorTemplate.MATERIAL_COLORS);
@@ -222,12 +234,24 @@ public class FragProgVues extends Fragment {
     private void addDataPie() {
         ArrayList<PieEntry> yEntrys=new ArrayList<>();
         ArrayList<String > xEntrys=new ArrayList<>();
-        for (int i=0 ;i<historiquePrgrams.size();i++){
-            yEntrys.add(new PieEntry(historiquePrgrams.get(i).getNb_telesp()));
+        Collections.sort(historiquePrgrams, (o1, o2) -> o2.getNb_telesp()-o1.getNb_telesp());
 
-        }
-        for (int i=0 ;i<historiquePrgrams.size();i++){
-            xEntrys.add(historiquePrgrams.get(i).getNom_program());
+        if (historiquePrgrams.size()>10) {
+            for (int i = 0; i < 10; i++) {
+                yEntrys.add(new PieEntry(historiquePrgrams.get(i).getNb_telesp()));
+
+            }
+            for (int i = 0; i < 10; i++) {
+                xEntrys.add(historiquePrgrams.get(i).getNom_program());
+            }
+        }else {
+            for (int i = 0; i < historiquePrgrams.size(); i++) {
+                yEntrys.add(new PieEntry(historiquePrgrams.get(i).getNb_telesp()));
+
+            }
+            for (int i = 0; i < historiquePrgrams.size(); i++) {
+                xEntrys.add(historiquePrgrams.get(i).getNom_program());
+            }
         }
         //create the data set
         PieDataSet pieDataSet=new PieDataSet(yEntrys,"Program Views");

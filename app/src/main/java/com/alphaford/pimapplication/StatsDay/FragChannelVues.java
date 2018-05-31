@@ -61,6 +61,7 @@ import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -220,12 +221,23 @@ public class FragChannelVues extends android.support.v4.app.Fragment {
         float barWidth=0.9f;
 
         ArrayList<BarEntry> yVals=new ArrayList<>();
-        for(int i=0;i<historiqueChaines.size();i++){
+        Collections.sort(historiqueChaines, (o1, o2) -> o2.getNbr_teles()-o1.getNbr_teles());
+        if (historiqueChaines.size()>10) {
+            for (int i = 0; i < 10; i++) {
 
-            int value = (int) (historiqueChaines.get(i).getNbr_teles());
-            yVals.add(new BarEntry(i, (int) value));
+                int value = (int) (historiqueChaines.get(i).getNbr_teles());
+                yVals.add(new BarEntry(i, (int) value));
 
 
+            }
+        }else{
+            for (int i = 0; i < historiqueChaines.size(); i++) {
+
+                int value = (int) (historiqueChaines.get(i).getNbr_teles());
+                yVals.add(new BarEntry(i, (int) value));
+
+
+            }
         }
         BarDataSet set = new BarDataSet(yVals,"Channel Views");
         set.setColors(ColorTemplate.MATERIAL_COLORS);
@@ -255,12 +267,25 @@ public class FragChannelVues extends android.support.v4.app.Fragment {
     private void addDataPie() {
         ArrayList<PieEntry> yEntrys=new ArrayList<>();
         ArrayList<String > xEntrys=new ArrayList<>();
-        for (int i=0 ;i<historiqueChaines.size();i++){
-            yEntrys.add(new PieEntry(historiqueChaines.get(i).getNbr_teles()));
+        //if (!historiqueChaines.isEmpty())
+        Collections.sort(historiqueChaines, (o1, o2) -> o2.getNbr_teles()-o1.getNbr_teles());
 
-        }
-        for (int i=0 ;i<historiqueChaines.size();i++){
-            xEntrys.add(historiqueChaines.get(i).getNom_chaine());
+        if (historiqueChaines.size()>10) {
+            for (int i = 0; i < 10; i++) {
+                yEntrys.add(new PieEntry(historiqueChaines.get(i).getNbr_teles()));
+
+            }
+            for (int i = 0; i < 10; i++) {
+                xEntrys.add(historiqueChaines.get(i).getNom_chaine());
+            }
+        }else {
+            for (int i = 0; i < historiqueChaines.size(); i++) {
+                yEntrys.add(new PieEntry(historiqueChaines.get(i).getNbr_teles()));
+
+            }
+            for (int i = 0; i < historiqueChaines.size(); i++) {
+                xEntrys.add(historiqueChaines.get(i).getNom_chaine());
+            }
         }
         //create the data set
         PieDataSet pieDataSet=new PieDataSet(yEntrys,"Channel Views");
